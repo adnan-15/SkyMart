@@ -1,8 +1,5 @@
 import React, { useContext, useState } from "react";
-import { Auth } from "../context/AuthContext";
-import { useForm } from "react-hook-form";
-import { toast } from "react-toastify";
-import { useNavigate } from "react-router";
+import { useAuth } from "../hooks/useAuth";
 
 // Fonts (Syne + DM Sans) and animations used by the classes below
 const pageStyles = `
@@ -41,36 +38,11 @@ const LoginPage = () => {
   // Show / hide password
   const [showPassword, setShowPassword] = useState(false);
 
-  const { registerU, setLogin } = useContext(Auth);
-
-  let navigate = useNavigate();
-
-  let {
+  const { navigate,
     register,
     handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm();
-
-  const formSubmit = (data) => {
-    // Compare emails ignoring capital letters and extra spaces
-    const email = data.email.trim().toLowerCase();
-
-    let user = registerU.find((val) => {
-      return val.email.toLowerCase() === email && val.password === data.password;
-    });
-
-    if (!user) {
-      toast.error("Invalid credentials or user not found");
-      reset() 
-      return;
-    }
-
-    setLogin(user);
-    localStorage.setItem("login", JSON.stringify(user));
-    toast.success("User logged in successfully");
-    navigate("/home");
-  };
+    errors,
+    loginFormSubmit} = useAuth();
 
   return (
     <div className="grid h-[100dvh] grid-cols-1 grid-rows-1 overflow-hidden bg-[#070707] font-['DM_Sans'] text-white antialiased lg:grid-cols-[1.05fr_1fr]">
@@ -182,7 +154,7 @@ const LoginPage = () => {
           <form
             noValidate
             className="rounded-[33px] bg-[#0f0f0f]/95 p-[clamp(22px,4.5vh,44px)] backdrop-blur-2xl"
-            onSubmit={handleSubmit(formSubmit)}
+            onSubmit={handleSubmit(loginFormSubmit)}
           >
             {/* Logo (small screens only, because the hero is hidden there) */}
             <div className="mb-[clamp(14px,3vh,32px)] flex items-center gap-3 font-['Syne'] text-xl font-bold lg:hidden">
@@ -291,7 +263,7 @@ const LoginPage = () => {
               Don&apos;t have an account?{" "}
               <button
                 type="button"
-                onClick={() => navigate("/register")}
+                onClick={() => navigate("register")}
                 className="cursor-pointer font-semibold text-[#c8f400] underline-offset-4 transition hover:underline"
               >
                 Create one

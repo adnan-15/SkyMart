@@ -1,8 +1,5 @@
 import React, { useContext, useState } from "react";
-import { Auth } from "../context/AuthContext";
-import { useNavigate } from "react-router";
-import { useForm } from "react-hook-form";
-import { toast } from "react-toastify";
+import { useAuth } from "../hooks/useAuth";
 
 // Fonts (Syne + DM Sans) and animations used by the classes below
 const pageStyles = `
@@ -56,39 +53,15 @@ const strengthStyles = {
 };
 
 const RegisterPage = () => {
-  const { registerU, setRegister, setLogin } = useContext(Auth);
-
-  let navigate = useNavigate();
-
-  let {
-    register,
-    handleSubmit,
-    watch,
-    reset,
-    formState: { errors },
-  } = useForm();
-
   // Live value of the password input (used for the strength line and for confirm check)
+  
+    const { navigate,
+      register,
+      handleSubmit,
+      watch,
+      errors,
+      registerFormSubmit} = useAuth();
   const password = watch("password") || "";
-
-  let formSubmit = (data) => {
-    let userr = registerU.find((val)=>{
-      return val.email===data.email
-    })
-    if(userr){
-      toast.error("Email already exist")
-      reset();
-      return
-    }
-    const { confirmPassword, ...user } = data;
-    let arr = [...registerU, user];
-    setRegister(arr);
-    setLogin(user);
-    localStorage.setItem("register", JSON.stringify(arr));
-    localStorage.setItem("login", JSON.stringify(user));
-    toast.success("User Registered Successfully")
-    navigate("/home");
-  };
 
   // Show / hide password (one for each password field)
   const [showPassword, setShowPassword] = useState(false);
@@ -108,6 +81,7 @@ const RegisterPage = () => {
   ].filter(Boolean).length;
   const level = !password ? 0 : points >= 3 ? 3 : points === 2 ? 2 : 1;
   const strength = strengthStyles[level];
+
 
   return (
     <div className="relative flex h-[100dvh] flex-col items-center justify-center overflow-hidden bg-[#070707] px-5 font-['DM_Sans'] text-white antialiased">
@@ -147,7 +121,7 @@ const RegisterPage = () => {
         <form
           noValidate
           className="rounded-[33px] bg-[#0f0f0f]/95 p-[clamp(20px,4vh,44px)] backdrop-blur-2xl"
-          onSubmit={handleSubmit(formSubmit)}
+          onSubmit={handleSubmit(registerFormSubmit)}
         >
           {/* Heading */}
           <h2 className="font-['Syne'] text-[length:clamp(24px,4.2vh,34px)] font-bold leading-tight tracking-[-0.025em]">
