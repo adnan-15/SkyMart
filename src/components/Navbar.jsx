@@ -67,31 +67,26 @@ const logoutButtonClass =
   "grid h-11 w-11 shrink-0 place-items-center rounded-xl border border-white/10 bg-white/[0.04] text-white transition duration-300 active:scale-95 [@media(hover:hover)]:hover:border-red-400/50 [@media(hover:hover)]:hover:bg-red-400/10 [@media(hover:hover)]:hover:text-red-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-red-400";
 
 const Navbar = () => {
-  const { login, setLogin } = useContext(Auth);
+  const { login, setLogin , setcartOpen} = useContext(Auth);
 
   let navigate = useNavigate();
   let location = useLocation();
 
-  // Mobile menu open / closed
   const [menuOpen, setMenuOpen] = useState(false);
 
-  // User name and the first letter shown in the avatar
   const userName = login?.name || "Guest";
   const initial = userName.charAt(0).toUpperCase();
 
-  // Is this link the current page? ("/main" must match exactly, the others also match inner pages)
   const isActive = (path) =>
     path === "/main"
       ? location.pathname === path
       : location.pathname.startsWith(path);
 
-  // Go to a page and close the mobile menu
   const goTo = (path) => {
     navigate(path);
     setMenuOpen(false);
   };
 
-  // Log the user out (edit this to match your own logic)
   const handleLogout = () => {
     setLogin(null);
     localStorage.removeItem("login");
@@ -160,7 +155,7 @@ const Navbar = () => {
           {/* Cart */}
           <button
             type="button"
-            onClick={() => goTo("/cart")}
+            onClick={() => setcartOpen(true)}
             aria-label="Open cart"
             className={iconButtonClass}
           >

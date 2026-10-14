@@ -1,9 +1,25 @@
-
-import React from "react";
+import React, { useContext } from "react";
+import { Auth } from "../context/AuthContext";
 
 const ProductCard = ({ product, index = 0 }) => {
   let { image, title, category, price, rating } = product;
-  
+
+  let { setstoreProduct, setcartOpen } = useContext(Auth);
+
+  const addToCart = () => {
+    setstoreProduct((prev) => {
+      let pro = prev.find((val) => val.id === product.id);
+      if (pro) {
+        return prev.map((val) => {
+          val.id === product.id
+            ? { ...val, quantity: (val.quantity || 1) + 1 }
+            : val;
+        });
+      }
+      return [...prev, { ...product, quantity: 1 }];
+    });
+    setcartOpen(true);
+  };
 
   return (
     <>
@@ -59,9 +75,7 @@ const ProductCard = ({ product, index = 0 }) => {
               className="relative z-10 h-full w-full object-contain transition-transform duration-700 ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-[1.09]"
             />
           ) : (
-            <div className="text-sm text-gray-400">
-              Product Image
-            </div>
+            <div className="text-sm text-gray-400">Product Image</div>
           )}
 
           <span className="absolute left-3 top-3 z-20 max-w-[75%] truncate rounded-full border border-black/5 bg-white/90 px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-[#333] shadow-sm backdrop-blur-md">
@@ -97,14 +111,10 @@ const ProductCard = ({ product, index = 0 }) => {
                   {Number(rating.rate).toFixed(1)}
                 </span>
 
-                <span className="text-xs text-gray-600">
-                  ({rating.count})
-                </span>
+                <span className="text-xs text-gray-600">({rating.count})</span>
               </>
             ) : (
-              <span className="text-xs text-gray-500">
-                No ratings yet
-              </span>
+              <span className="text-xs text-gray-500">No ratings yet</span>
             )}
           </div>
 
@@ -124,6 +134,7 @@ const ProductCard = ({ product, index = 0 }) => {
 
             <button
               type="button"
+              onClick={addToCart}
               className="group/add relative flex shrink-0 items-center gap-2 overflow-hidden rounded-full bg-[#c8f400] px-4 py-2.5 text-xs font-extrabold text-black transition-[transform,background-color,box-shadow] duration-300 ease-out hover:scale-105 hover:bg-[#dcff35] hover:shadow-[0_5px_22px_rgba(200,244,0,.25)] active:scale-95"
             >
               <span className="pointer-events-none absolute inset-0 -translate-x-[150%] skew-x-[-20deg] bg-white/40 transition-transform duration-700 group-hover/add:translate-x-[180%]" />

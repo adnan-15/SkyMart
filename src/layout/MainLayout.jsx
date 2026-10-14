@@ -1,4 +1,3 @@
-
 import React from "react";
 import Navbar from "../components/Navbar";
 import { Outlet } from "react-router";
@@ -6,13 +5,13 @@ import { Outlet } from "react-router";
 const MainLayout = () => {
   return (
     <div className="flex min-h-screen flex-col bg-[#0c0c0c] text-white">
-      {/* Navbar */}
-      <header className="shrink-0">
+      {/* Fixed Navbar */}
+      <header className="fixed inset-x-0 top-0 z-50  bg-[#0c0c0c]/70 backdrop-blur-md opacity-90">
         <Navbar />
       </header>
 
-      {/* Main Content */}
-      <main className="flex-1">
+      {/* Main Content (pt-20 = navbar height, so content doesn't hide under it) */}
+      <main className="flex-1 pt-20">
         <Outlet />
       </main>
 
