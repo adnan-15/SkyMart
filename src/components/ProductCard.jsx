@@ -1,21 +1,23 @@
 import React, { useContext } from "react";
 import { Auth } from "../context/AuthContext";
+import { useEffect } from "react";
 
 const ProductCard = ({ product, index = 0 }) => {
   let { image, title, category, price, rating } = product;
 
-  let { setstoreProduct, setcartOpen } = useContext(Auth);
+  let { setstoreProduct, setcartOpen,storeProduct} = useContext(Auth);
 
   const addToCart = () => {
     setstoreProduct((prev) => {
+      
       let pro = prev.find((val) => val.id === product.id);
+      
       if (pro) {
-        return prev.map((val) => {
-          val.id === product.id
-            ? { ...val, quantity: (val.quantity || 1) + 1 }
-            : val;
-        });
-      }
+        
+        return prev.map(
+          (val) => val.id === product.id
+          ? { ...val, quantity: (val.quantity || 1) + 1 }: val);
+        }
       return [...prev, { ...product, quantity: 1 }];
     });
     setcartOpen(true);
@@ -97,7 +99,7 @@ const ProductCard = ({ product, index = 0 }) => {
 
           {/* Rating UI */}
           <div className="mb-4 flex min-h-5 items-center gap-2">
-            {rating.rate != null && Number.isFinite(Number(rating.rate)) ? (
+            {rating?.rate != null && Number.isFinite(Number(rating.rate)) ? (
               <>
                 <div className="flex gap-0.5 text-sm text-[#ffc400]">
                   {Array.from({ length: 5 }, (_, i) => (

@@ -1,7 +1,8 @@
 import React, { useContext, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
 import { Auth } from "../context/AuthContext";
-
+import { FaXmark } from "react-icons/fa6";
+import toast from "react-hot-toast";
 // Fonts (Syne + DM Sans) and animation used by the classes below
 const pageStyles = `
   @import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Syne:wght@600;700;800&display=swap");
@@ -67,7 +68,7 @@ const logoutButtonClass =
   "grid h-11 w-11 shrink-0 place-items-center rounded-xl border border-white/10 bg-white/[0.04] text-white transition duration-300 active:scale-95 [@media(hover:hover)]:hover:border-red-400/50 [@media(hover:hover)]:hover:bg-red-400/10 [@media(hover:hover)]:hover:text-red-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-red-400";
 
 const Navbar = () => {
-  const { login, setLogin , setcartOpen} = useContext(Auth);
+  const { login, setLogin, setcartOpen, setstoreProduct } = useContext(Auth);
 
   let navigate = useNavigate();
   let location = useLocation();
@@ -89,9 +90,10 @@ const Navbar = () => {
 
   const handleLogout = () => {
     setLogin(null);
-    localStorage.removeItem("login");
     setMenuOpen(false);
+    setstoreProduct([]);
     navigate("/");
+    localStorage.setItem("login",null)
   };
 
   return (
@@ -169,7 +171,28 @@ const Navbar = () => {
           {/* Logout */}
           <button
             type="button"
-            onClick={handleLogout}
+            onClick={() => {
+              toast.error("User Logged out!", {
+                duration: 2500,
+                position: "bottom-right",
+                icon: (
+                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#ff4d4f]">
+                    <FaXmark className="text-sm text-white" />
+                  </div>
+                ),
+                style: {
+                  background: "#141414",
+                  color: "#fff",
+                  border: "1px solid #ff4d4f",
+                  borderRadius: "10px",
+                  padding: "10px 15px",
+                  fontSize: "14px",
+                  fontWeight: "600",
+                  boxShadow: "0 8px 30px rgba(255, 77, 79, 0.15)",
+                },
+              });
+               handleLogout()
+            }}
             aria-label="Log out"
             className={logoutButtonClass}
           >
@@ -224,7 +247,9 @@ const Navbar = () => {
                 {initial}
               </span>
               <div className="min-w-0">
-                <div className="truncate text-[15px] font-medium">{userName}</div>
+                <div className="truncate text-[15px] font-medium">
+                  {userName}
+                </div>
                 <div className="text-xs text-[#8a8a8a]">Signed in</div>
               </div>
             </div>

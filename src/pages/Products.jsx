@@ -1,8 +1,10 @@
 import React, { useContext, useEffect, useState } from "react";
 import ProductCard from "../components/ProductCard";
 import { axiosInstance } from "../config/axiosInstance";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import { Auth } from "../context/AuthContext";
+import { FaCheck } from "react-icons/fa";
+import { FaXmark } from "react-icons/fa6";
 import {
   X,
   PackageSearch,
@@ -13,11 +15,12 @@ import {
   PackageOpen,
   Trash2,
 } from "lucide-react";
-
+import { useNavigate } from "react-router";
 const inputBase =
   "rounded-2xl border border-white/10 bg-[#1d1d1d] text-sm outline-none transition focus:border-[#c8f400]/60";
 
 const Products = () => {
+  let navigate = useNavigate();
   let {
     productData,
     setproductData,
@@ -53,18 +56,6 @@ const Products = () => {
 
   let displayProducts = displayProduct();
 
-  // Active filter chips (UI helpers)
-  const categoryLabels = {
-    electronics: "Electronics",
-    jewelery: "Jewelry",
-    "men's clothing": "Men's Clothing",
-    "women's clothing": "Women's Clothing",
-  };
-  const sortLabels = {
-    "low-to-high": "Price: Low → High",
-    "high-to-low": "Price: High → Low",
-    "name-a-z": "Name: A → Z",
-  };
   const hasCategory = category && category !== "All Categories";
   const hasSearch = (searchItem || "").trim() !== "";
   const hasSort = sortBy && sortBy !== "all";
@@ -93,7 +84,25 @@ const Products = () => {
       }
       setproductData(res.data);
     } catch (e) {
-      toast.error(e);
+      toast.error(e, {
+  duration: 2500,
+  position: "bottom-right",
+  icon: (
+    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#ff4d4f]">
+      <FaXmark className="text-sm text-white" />
+    </div>
+  ),
+  style: {
+    background: "#141414",
+    color: "#fff",
+    border: "1px solid #ff4d4f",
+    borderRadius: "10px",
+    padding: "10px 15px",
+    fontSize: "14px",
+    fontWeight: "600",
+    boxShadow: "0 8px 30px rgba(255, 77, 79, 0.15)",
+  },
+});
     } finally {
       setloading(false);
     }
@@ -117,10 +126,12 @@ const Products = () => {
 
   const decreaseProduct = (id) => {
     setstoreProduct((prev) =>
-      prev.map((val) =>
-        val.id === id ? { ...val, quantity: (val.quantity ?? 1) - 1 } : val,
-      ),
-    ).filter((val) => val.quantity > 0);
+      prev
+        .map((val) =>
+          val.id === id ? { ...val, quantity: (val.quantity ?? 1) - 1 } : val,
+        )
+        .filter((val) => val.quantity > 0),
+    );
   };
 
   const dltProduct = (id) => {
@@ -284,7 +295,7 @@ const Products = () => {
             <div className="mt-4 flex flex-wrap items-center gap-2 border-t border-white/10 pt-4">
               {hasCategory && (
                 <span className={chip}>
-                  {categoryLabels[category] || category}
+                  {category}
                   <button
                     type="button"
                     aria-label="Remove category"
@@ -308,7 +319,7 @@ const Products = () => {
               )}
               {hasSort && (
                 <span className={chip}>
-                  {sortLabels[sortBy]}
+                  {sortBy}
                   <button
                     type="button"
                     aria-label="Remove sort"
@@ -322,7 +333,6 @@ const Products = () => {
           )}
         </div>
 
-        {/* Product count */}
         <div className="mb-6 flex items-center justify-between">
           <p className="text-sm text-gray-400">
             Showing {displayProducts.length} products
@@ -331,7 +341,6 @@ const Products = () => {
           <span className="h-1 w-12 rounded-full bg-[#c8f400]" />
         </div>
 
-        {/* Product grid / empty state */}
         {displayProducts.length > 0 ? (
           <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {displayProducts.map((product, index) => (
@@ -409,7 +418,10 @@ const Products = () => {
                   </p>
 
                   <button
-                    onClick={() => setcartOpen(false)}
+                    onClick={() => {
+                      setcartOpen(false);
+                      navigate("/main/products");
+                    }}
                     className="mt-7 rounded-2xl bg-[#c8f400] px-7 py-4 font-semibold text-black transition hover:bg-[#d8ff00]"
                   >
                     Browse Products
@@ -447,8 +459,6 @@ const Products = () => {
                           aria-label="Decrease quantity"
                           onClick={() => {
                             decreaseProduct(val.id);
-                            toast.success("Quantity Updated")
-
                           }}
                           className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/15 text-gray-300 transition hover:border-[#c8f400]/60 hover:text-[#c8f400]"
                         >
@@ -463,7 +473,6 @@ const Products = () => {
                           aria-label="Increase quantity"
                           onClick={() => {
                             increaseProduct(val.id);
-                            toast.success("Quantity Updated")
                           }}
                           className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/15 text-gray-300 transition hover:border-[#c8f400]/60 hover:text-[#c8f400]"
                         >
@@ -475,8 +484,6 @@ const Products = () => {
                           className="ml-auto flex h-8 w-8 items-center justify-center rounded-lg text-red-400/80 transition hover:bg-red-500/10 hover:text-red-400"
                           onClick={() => {
                             dltProduct(val.id);
-                            toast.success("Product Removed")
-
                           }}
                         >
                           <Trash2 size={16} />
@@ -506,20 +513,60 @@ const Products = () => {
                   </span>
                 </div>
 
-                <button className="font-syne flex w-full items-center justify-center gap-3 rounded-2xl bg-[#c8f400] py-3 text-base font-bold text-black transition duration-300 hover:-translate-y-0.5 hover:bg-[#dcff35] hover:shadow-[0_10px_35px_rgba(200,244,0,0.15)]">
-                  Checkout <ArrowRight size={18} onClick={()=>{
-                    setcartOpen(false)
-                    setstoreProduct()
-                    toast.success("Order Placed Successfully 🎉")
-                  }}/>
+                <button
+                  onClick={() => {
+                    setcartOpen(false);
+                    setstoreProduct([]);
+
+                    toast.success("Order Placed! 🎉", {
+                      duration: 2500,
+                      position: "bottom-right",
+                      icon: (
+                        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#c8f400]">
+                          <FaCheck className="text-sm text-[#0c0c0c]" />
+                        </div>
+                      ),
+                      style: {
+                        background: "#141414",
+                        color: "#fff",
+                        border: "1px solid #c8f400",
+                        borderRadius: "10px",
+                        padding: "10px 15px",
+                        fontSize: "14px",
+                        fontWeight: "600",
+                        boxShadow: "0 8px 30px rgba(200, 244, 0, 0.15)",
+                      },
+                    });
+                  }}
+                  className="font-syne flex w-full items-center justify-center gap-3 rounded-2xl bg-[#c8f400] py-3 text-base font-bold text-black transition duration-300 hover:-translate-y-0.5 hover:bg-[#dcff35] hover:shadow-[0_10px_35px_rgba(200,244,0,0.15)]"
+                >
+                  Checkout <ArrowRight size={18} />
                 </button>
 
                 <button
                   className="mt-4 w-full text-center text-sm text-gray-500 transition hover:text-red-400"
-                  onClick={() => {setstoreProduct([])
-                    toast.success("All Products Removed Successfully")
+                  onClick={() => {
+                    setstoreProduct([]);
+                    toast.error("All products removed successfully", {
+                      duration: 2500,
+                      position: "bottom-right",
+                      icon: (
+                        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#ff4d4f]">
+                          <FaCheck className="text-sm text-white" />
+                        </div>
+                      ),
+                      style: {
+                        background: "#141414",
+                        color: "#fff",
+                        border: "1px solid #ff4d4f",
+                        borderRadius: "10px",
+                        padding: "10px 15px",
+                        fontSize: "14px",
+                        fontWeight: "600",
+                        boxShadow: "0 8px 30px rgba(255, 77, 79, 0.15)",
+                      },
+                    });
                   }}
-
                 >
                   Clear cart
                 </button>
