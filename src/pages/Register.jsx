@@ -6,6 +6,7 @@ const pageStyles = `
   @import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Syne:wght@600;700;800&display=swap");
   @keyframes drift { 0%,100% { transform: translate(0,0) scale(1) } 50% { transform: translate(50px,-40px) scale(1.18) } }
   @keyframes rise  { from { opacity: 0; transform: translateY(20px) } to { opacity: 1; transform: none } }
+  @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important } }
 `;
 
 // Props shared by every icon
@@ -22,16 +23,16 @@ const icon = {
 
 // Shared Tailwind classes
 const inputClass =
-  "peer h-[clamp(46px,7vh,62px)] w-full rounded-2xl border border-white/10 bg-white/[0.04] pb-0 pl-[52px] pr-[52px] pt-[clamp(15px,2.8vh,22px)] text-[15px] text-white outline-none transition duration-300 hover:border-white/20 focus:border-[#c8f400]/70 focus:bg-white/[0.07] focus:shadow-[0_0_0_4px_rgba(200,244,0,0.12),0_8px_30px_rgba(200,244,0,0.08)]";
+  "peer h-12 w-full rounded-xl border border-white/10 bg-white/[0.04] pb-0 pl-11 pr-11 pt-5 text-sm text-white outline-none transition duration-300 hover:border-white/20 focus:border-[#c8f400]/70 focus:bg-white/[0.07] focus:shadow-[0_0_0_3px_rgba(200,244,0,0.12)]";
 const labelClass =
-  "pointer-events-none absolute left-[52px] top-1/2 -translate-y-1/2 text-[15px] text-[#7a7a7a] transition-all duration-200 peer-focus:top-[32%] peer-focus:text-[11px] peer-focus:text-[#c8f400] peer-[:not(:placeholder-shown)]:top-[32%] peer-[:not(:placeholder-shown)]:text-[11px]";
+  "pointer-events-none absolute left-11 top-1/2 -translate-y-1/2 text-sm text-[#7a7a7a] transition-all duration-200 peer-focus:top-[32%] peer-focus:text-[11px] peer-focus:text-[#c8f400] peer-[:not(:placeholder-shown)]:top-[32%] peer-[:not(:placeholder-shown)]:text-[11px]";
 const leftIconClass =
-  "pointer-events-none absolute left-[18px] top-1/2 z-10 -translate-y-1/2 text-[#6f6f6f] transition-colors duration-300 group-focus-within:text-[#c8f400]";
+  "pointer-events-none absolute left-4 top-1/2 z-10 -translate-y-1/2 text-[#6f6f6f] transition-colors duration-300 group-focus-within:text-[#c8f400]";
 const eyeButtonClass =
-  "absolute right-2.5 top-1/2 z-10 grid h-9 w-9 -translate-y-1/2 place-items-center rounded-xl text-[#7a7a7a] transition hover:bg-white/10 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#c8f400]";
+  "absolute right-2 top-1/2 z-10 grid h-8 w-8 -translate-y-1/2 place-items-center rounded-lg text-[#7a7a7a] transition hover:bg-white/10 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#c8f400]";
 const submitButtonClass =
-  "group/btn relative mt-[clamp(14px,2.6vh,28px)] flex h-[clamp(46px,7vh,62px)] w-full items-center justify-center gap-2.5 overflow-hidden rounded-2xl bg-gradient-to-r from-[#d4ff1f] to-[#b6e600] font-['Syne'] text-[17px] font-bold text-[#0b0b0b] shadow-[0_10px_34px_rgba(200,244,0,0.25)] transition duration-300 hover:-translate-y-0.5 hover:shadow-[0_16px_44px_rgba(200,244,0,0.4)] active:translate-y-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white";
-const errorClass = "px-1 pt-1.5 text-xs text-red-400";
+  "group/btn relative mt-5 flex h-12 w-full items-center justify-center gap-2 overflow-hidden rounded-xl bg-gradient-to-r from-[#d4ff1f] to-[#b6e600] font-['Syne'] text-base font-bold text-[#0b0b0b] shadow-[0_8px_26px_rgba(200,244,0,0.22)] transition duration-300 hover:-translate-y-0.5 hover:shadow-[0_12px_34px_rgba(200,244,0,0.35)] active:translate-y-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white";
+const errorClass = "px-1 pt-1 text-xs text-red-400";
 
 // Look of each strength level (1 = weak, 2 = medium, 3 = strong)
 const strengthStyles = {
@@ -54,7 +55,7 @@ const strengthStyles = {
 
 const RegisterPage = () => {
   // Live value of the password input (used for the strength line and for confirm check)
-  
+
     const { navigate,
       register,
       handleSubmit,
@@ -82,20 +83,40 @@ const RegisterPage = () => {
   const level = !password ? 0 : points >= 3 ? 3 : points === 2 ? 2 : 1;
   const strength = strengthStyles[level];
 
+  const eyeOff = (
+    <svg {...icon}>
+      <path d="M9.9 5.2A10 10 0 0 1 12 5c6.4 0 10 7 10 7a17 17 0 0 1-3.2 4.1" />
+      <path d="M6.6 6.6A17 17 0 0 0 2 12s3.6 7 10 7a9.7 9.7 0 0 0 4.4-1" />
+      <path d="M9.9 9.9a3 3 0 0 0 4.2 4.2" />
+      <path d="m3 3 18 18" />
+    </svg>
+  );
+  const eyeOn = (
+    <svg {...icon}>
+      <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z" />
+      <circle cx="12" cy="12" r="3" />
+    </svg>
+  );
+  const lockIcon = (
+    <svg {...icon}>
+      <rect x="4" y="11" width="16" height="10" rx="2" />
+      <path d="M8 11V7a4 4 0 0 1 8 0v4" />
+    </svg>
+  );
 
   return (
-    <div className="relative flex h-[100dvh] flex-col items-center justify-center overflow-hidden bg-[#070707] px-5 font-['DM_Sans'] text-white antialiased">
+    <div className="relative flex min-h-[100dvh] flex-col items-center justify-center overflow-hidden bg-[#070707] px-4 py-8 font-['DM_Sans'] text-white antialiased sm:px-6">
       <style>{pageStyles}</style>
 
       {/* Background: moving glows + faint grid */}
-      <div className="pointer-events-none absolute -left-40 top-[10%] h-[480px] w-[480px] animate-[drift_14s_ease-in-out_infinite] rounded-full bg-[#c8f400]/20 blur-[130px]" />
-      <div className="pointer-events-none absolute -right-32 bottom-[5%] h-[420px] w-[420px] animate-[drift_18s_ease-in-out_infinite_reverse] rounded-full bg-[#19d38a]/20 blur-[130px]" />
+      <div className="pointer-events-none absolute -left-40 top-[10%] h-[420px] w-[420px] animate-[drift_14s_ease-in-out_infinite] rounded-full bg-[#c8f400]/20 blur-[130px]" />
+      <div className="pointer-events-none absolute -right-32 bottom-[5%] h-[380px] w-[380px] animate-[drift_18s_ease-in-out_infinite_reverse] rounded-full bg-[#19d38a]/20 blur-[130px]" />
       <div
         className="pointer-events-none absolute inset-0 opacity-[0.14]"
         style={{
           backgroundImage:
             "linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)",
-          backgroundSize: "64px 64px",
+          backgroundSize: "56px 56px",
           maskImage:
             "radial-gradient(ellipse at 50% 45%, #000 0%, transparent 70%)",
           WebkitMaskImage:
@@ -104,8 +125,8 @@ const RegisterPage = () => {
       />
 
       {/* Logo */}
-      <div className="relative mb-[clamp(10px,2.6vh,28px)] flex items-center gap-3 font-['Syne'] text-[length:clamp(20px,3.4vh,24px)] font-bold">
-        <div className="grid h-[clamp(36px,6vh,48px)] w-[clamp(36px,6vh,48px)] place-items-center rounded-[14px] bg-gradient-to-br from-[#d9ff2e] to-[#a6d400] text-[#0b0b0b] shadow-[0_8px_30px_rgba(200,244,0,0.45)]">
+      <div className="relative mb-5 flex items-center gap-2.5 font-['Syne'] text-xl font-bold">
+        <div className="grid h-10 w-10 place-items-center rounded-xl bg-gradient-to-br from-[#d9ff2e] to-[#a6d400] text-[#0b0b0b] shadow-[0_6px_22px_rgba(200,244,0,0.4)]">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
             <path d="M13.5 2 5 13.5h6L10 22l9-12h-6.2L13.5 2Z" />
           </svg>
@@ -116,22 +137,22 @@ const RegisterPage = () => {
       </div>
 
       {/* Gradient border wrapper */}
-      <div className="relative w-full max-w-[520px] animate-[rise_0.8s_ease-out_both] rounded-[34px] bg-gradient-to-b from-[#c8f400]/45 via-white/10 to-white/[0.03] p-px shadow-[0_40px_100px_rgba(0,0,0,0.7)]">
+      <div className="relative w-full max-w-[440px] animate-[rise_0.8s_ease-out_both] rounded-3xl bg-gradient-to-b from-[#c8f400]/45 via-white/10 to-white/[0.03] p-px shadow-[0_30px_80px_rgba(0,0,0,0.7)]">
         {/* noValidate: lets react-hook-form show the errors instead of the browser's popups */}
         <form
           noValidate
-          className="rounded-[33px] bg-[#0f0f0f]/95 p-[clamp(20px,4vh,44px)] backdrop-blur-2xl"
+          className="rounded-[23px] bg-[#0f0f0f]/95 p-6 backdrop-blur-2xl sm:p-8"
           onSubmit={handleSubmit(registerFormSubmit)}
         >
           {/* Heading */}
-          <h2 className="font-['Syne'] text-[length:clamp(24px,4.2vh,34px)] font-bold leading-tight tracking-[-0.025em]">
+          <h2 className="font-['Syne'] text-2xl font-bold leading-tight tracking-[-0.02em]">
             Create account
           </h2>
-          <p className="mb-[clamp(12px,3vh,32px)] mt-1 text-[15px] text-[#8a8a8a]">
+          <p className="mb-5 mt-1 text-sm text-[#8a8a8a]">
             Join SkyMart and start shopping
           </p>
 
-          <div className="space-y-[clamp(8px,1.6vh,16px)]">
+          <div className="space-y-3">
             {/* Full name */}
             <div>
               <div className="group relative">
@@ -185,12 +206,7 @@ const RegisterPage = () => {
             {/* Password */}
             <div>
               <div className="group relative">
-                <span className={leftIconClass}>
-                  <svg {...icon}>
-                    <rect x="4" y="11" width="16" height="10" rx="2" />
-                    <path d="M8 11V7a4 4 0 0 1 8 0v4" />
-                  </svg>
-                </span>
+                <span className={leftIconClass}>{lockIcon}</span>
                 <input
                   type={showPassword ? "text" : "password"}
                   placeholder=" "
@@ -212,19 +228,7 @@ const RegisterPage = () => {
                   aria-label={showPassword ? "Hide password" : "Show password"}
                   className={eyeButtonClass}
                 >
-                  {showPassword ? (
-                    <svg {...icon}>
-                      <path d="M9.9 5.2A10 10 0 0 1 12 5c6.4 0 10 7 10 7a17 17 0 0 1-3.2 4.1" />
-                      <path d="M6.6 6.6A17 17 0 0 0 2 12s3.6 7 10 7a9.7 9.7 0 0 0 4.4-1" />
-                      <path d="M9.9 9.9a3 3 0 0 0 4.2 4.2" />
-                      <path d="m3 3 18 18" />
-                    </svg>
-                  ) : (
-                    <svg {...icon}>
-                      <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z" />
-                      <circle cx="12" cy="12" r="3" />
-                    </svg>
-                  )}
+                  {showPassword ? eyeOff : eyeOn}
                 </button>
               </div>
               {errors.password && (
@@ -246,7 +250,7 @@ const RegisterPage = () => {
                   ))}
                 </div>
                 <span
-                  className={`min-w-[54px] text-right text-[13px] font-semibold ${strength.text}`}
+                  className={`min-w-[54px] text-right text-xs font-semibold ${strength.text}`}
                 >
                   {strength.label}
                 </span>
@@ -256,12 +260,7 @@ const RegisterPage = () => {
             {/* Confirm password */}
             <div>
               <div className="group relative">
-                <span className={leftIconClass}>
-                  <svg {...icon}>
-                    <rect x="4" y="11" width="16" height="10" rx="2" />
-                    <path d="M8 11V7a4 4 0 0 1 8 0v4" />
-                  </svg>
-                </span>
+                <span className={leftIconClass}>{lockIcon}</span>
                 <input
                   type={showConfirm ? "text" : "password"}
                   placeholder=" "
@@ -281,19 +280,7 @@ const RegisterPage = () => {
                   aria-label={showConfirm ? "Hide password" : "Show password"}
                   className={eyeButtonClass}
                 >
-                  {showConfirm ? (
-                    <svg {...icon}>
-                      <path d="M9.9 5.2A10 10 0 0 1 12 5c6.4 0 10 7 10 7a17 17 0 0 1-3.2 4.1" />
-                      <path d="M6.6 6.6A17 17 0 0 0 2 12s3.6 7 10 7a9.7 9.7 0 0 0 4.4-1" />
-                      <path d="M9.9 9.9a3 3 0 0 0 4.2 4.2" />
-                      <path d="m3 3 18 18" />
-                    </svg>
-                  ) : (
-                    <svg {...icon}>
-                      <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z" />
-                      <circle cx="12" cy="12" r="3" />
-                    </svg>
-                  )}
+                  {showConfirm ? eyeOff : eyeOn}
                 </button>
               </div>
               {errors.confirmPassword && (
@@ -308,8 +295,8 @@ const RegisterPage = () => {
             <span className="relative">Create Account</span>
             <svg
               {...icon}
-              width="20"
-              height="20"
+              width="18"
+              height="18"
               strokeWidth="2.2"
               className="relative transition-transform duration-300 group-hover/btn:translate-x-1"
             >
@@ -318,7 +305,7 @@ const RegisterPage = () => {
           </button>
 
           {/* Login link */}
-          <p className="mt-[clamp(12px,2.6vh,28px)] text-center text-[15px] text-[#8a8a8a]">
+          <p className="mt-5 text-center text-sm text-[#8a8a8a]">
             Already have an account?{" "}
             <button
               type="button"
@@ -331,32 +318,18 @@ const RegisterPage = () => {
         </form>
       </div>
 
-      {/* Perks (hidden on short screens so the page never scrolls) */}
-      <div className="relative mt-[clamp(12px,3vh,28px)] flex flex-wrap justify-center gap-x-7 gap-y-2 text-sm text-[#8a8a8a] [@media(max-height:760px)]:hidden">
-        <span className="flex items-center gap-2">
-          <span className="grid h-5 w-5 place-items-center rounded-full bg-[#c8f400]/15 text-[#c8f400]">
-            <svg {...icon} width="14" height="14" strokeWidth="2.8">
-              <path d="m5 12.5 4.5 4.5L19 7.5" />
-            </svg>
+      {/* Perks (hidden on short screens so the page stays compact) */}
+      <div className="relative mt-5 flex flex-wrap justify-center gap-x-6 gap-y-2 text-xs text-[#8a8a8a] sm:text-sm [@media(max-height:760px)]:hidden">
+        {["Free delivery", "Easy returns", "Secure checkout"].map((perk) => (
+          <span key={perk} className="flex items-center gap-2">
+            <span className="grid h-5 w-5 place-items-center rounded-full bg-[#c8f400]/15 text-[#c8f400]">
+              <svg {...icon} width="14" height="14" strokeWidth="2.8">
+                <path d="m5 12.5 4.5 4.5L19 7.5" />
+              </svg>
+            </span>
+            {perk}
           </span>
-          Free delivery
-        </span>
-        <span className="flex items-center gap-2">
-          <span className="grid h-5 w-5 place-items-center rounded-full bg-[#c8f400]/15 text-[#c8f400]">
-            <svg {...icon} width="14" height="14" strokeWidth="2.8">
-              <path d="m5 12.5 4.5 4.5L19 7.5" />
-            </svg>
-          </span>
-          Easy returns
-        </span>
-        <span className="flex items-center gap-2">
-          <span className="grid h-5 w-5 place-items-center rounded-full bg-[#c8f400]/15 text-[#c8f400]">
-            <svg {...icon} width="14" height="14" strokeWidth="2.8">
-              <path d="m5 12.5 4.5 4.5L19 7.5" />
-            </svg>
-          </span>
-          Secure checkout
-        </span>
+        ))}
       </div>
     </div>
   );

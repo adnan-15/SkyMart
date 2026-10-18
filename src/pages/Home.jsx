@@ -16,6 +16,28 @@ import toast from "react-hot-toast";
 import { FaCheck } from "react-icons/fa6";
 import { useEffect } from "react";
 
+const toastBase = {
+  duration: 2500,
+  position: "bottom-right",
+  icon: (
+    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#c8f400]">
+      <FaCheck className="text-sm text-[#0c0c0c]" />
+    </div>
+  ),
+  style: {
+    background: "#141414",
+    color: "#fff",
+    border: "1px solid #c8f400",
+    borderRadius: "10px",
+    padding: "10px 15px",
+    fontSize: "14px",
+    fontWeight: "600",
+    boxShadow: "0 8px 30px rgba(200, 244, 0, 0.15)",
+  },
+};
+
+const sectionTitle = "font-syne text-lg font-bold tracking-tight sm:text-xl";
+
 const Home = () => {
   const navigate = useNavigate();
   let { id } = useParams();
@@ -24,7 +46,7 @@ const Home = () => {
     setcategory,
     setcartOpen,
     storeProduct,
-    getProduct
+    getProduct,
   } = useContext(Auth);
   let { addToCart } = useAuth();
 
@@ -44,10 +66,10 @@ const Home = () => {
     }
   };
 
-  useEffect(()=>{
+  useEffect(() => {
     getProduct();
-  },[])
-  
+  }, []);
+
   const categories = Object.values(
     productData.reduce((acc, p) => {
       acc[p.category] ??= { name: p.category, image: p.image, count: 0 };
@@ -121,47 +143,47 @@ const Home = () => {
   if (id) return <CardOverview />;
 
   return (
-    <main className="font-dm-sans min-h-screen bg-[#0c0c0c] py-8 text-white sm:py-12">
+    <main className="font-dm-sans min-h-screen bg-[#0c0c0c] py-6 text-white sm:py-10">
       <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Hero */}
-        <section className="relative mb-12 overflow-hidden rounded-3xl border border-white/10 bg-[#111111] px-6 py-10 sm:px-10 sm:py-14">
+        <section className="relative mb-8 overflow-hidden rounded-2xl border border-white/10 bg-[#111111] px-5 py-7 sm:px-8 sm:py-10">
           <div
             className="pointer-events-none absolute inset-0 opacity-40"
             style={{
               backgroundImage:
                 "linear-gradient(rgba(200,244,0,.06) 1px, transparent 1px), linear-gradient(90deg, rgba(200,244,0,.06) 1px, transparent 1px)",
-              backgroundSize: "43px 43px",
+              backgroundSize: "40px 40px",
             }}
           />
-          <div className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full bg-[#c8f400]/10 blur-3xl" />
+          <div className="pointer-events-none absolute -right-20 -top-20 h-60 w-60 rounded-full bg-[#c8f400]/10 blur-3xl" />
 
-          <div className="relative flex flex-col justify-between gap-10 md:flex-row md:items-center">
-            <div className="max-w-[620px]">
-              <p className="mb-4 text-xs font-bold uppercase tracking-[.25em] text-[#c8f400]">
+          <div className="relative flex flex-col justify-between gap-6 md:flex-row md:items-center">
+            <div className="max-w-[560px]">
+              <p className="mb-3 text-[11px] font-bold uppercase tracking-[.2em] text-[#c8f400]">
                 {getGreeting()} 👋
               </p>
 
-              <h1 className="font-syne text-4xl font-extrabold leading-[1.12] tracking-tight sm:text-5xl lg:text-6xl">
+              <h1 className="font-syne text-3xl font-extrabold leading-[1.15] tracking-tight sm:text-4xl lg:text-5xl">
                 Welcome back,
-                <span className="mt-1 block text-[#c8f400]">
+                <span className="mt-0.5 block break-words text-[#c8f400]">
                   {getUsername()}!
                 </span>
               </h1>
 
-              <p className="mt-5 max-w-lg text-sm leading-7 text-gray-400 sm:text-base">
+              <p className="mt-3 max-w-md text-sm leading-6 text-gray-400">
                 Discover today's picks — hand-curated products across
                 electronics, fashion, and more.
               </p>
 
-              <div className="mt-8 flex flex-wrap gap-3">
+              <div className="mt-5 flex flex-wrap gap-2.5">
                 <button
                   onClick={() => {
                     navigate("products");
                     setcategory();
                   }}
-                  className="flex items-center gap-2 rounded-2xl bg-[#c8f400] px-6 py-3.5 text-sm font-bold text-black transition duration-300 hover:-translate-y-0.5 hover:bg-[#dcff35] hover:shadow-[0_10px_35px_rgba(200,244,0,0.15)]"
+                  className="flex items-center gap-2 rounded-xl bg-[#c8f400] px-5 py-2.5 text-sm font-bold text-black transition duration-300 hover:-translate-y-0.5 hover:bg-[#dcff35] hover:shadow-[0_10px_35px_rgba(200,244,0,0.15)]"
                 >
-                  Shop Now <ArrowRight size={16} />
+                  Shop Now <ArrowRight size={15} />
                 </button>
 
                 <button
@@ -169,72 +191,68 @@ const Home = () => {
                     navigate("products");
                     setcategory();
                   }}
-                  className="rounded-2xl border border-white/15 px-6 py-3.5 text-sm font-medium text-gray-300 transition hover:border-[#c8f400]/60 hover:text-[#c8f400]"
+                  className="rounded-xl border border-white/15 px-5 py-2.5 text-sm font-medium text-gray-300 transition hover:border-[#c8f400]/60 hover:text-[#c8f400]"
                 >
                   View All Products
                 </button>
               </div>
             </div>
 
-            <div className="flex shrink-0 flex-row gap-3 md:w-[190px] md:flex-col">
-              <div className="flex-1 rounded-2xl border border-[#c8f400]/25 bg-[#c8f400]/10 px-5 py-5 text-center">
-                <p className="font-syne text-3xl font-extrabold text-[#c8f400]">
+            <div className="flex shrink-0 flex-row gap-3 md:w-44 md:flex-col">
+              <div className="flex-1 rounded-xl border border-[#c8f400]/25 bg-[#c8f400]/10 px-4 py-4 text-center">
+                <p className="font-syne text-2xl font-extrabold text-[#c8f400]">
                   {productData.length}+
                 </p>
-                <p className="mt-1 text-xs text-gray-400">Products Available</p>
+                <p className="mt-0.5 text-xs text-gray-400">Products Available</p>
               </div>
-              <div className="flex-1 rounded-2xl border border-white/10 bg-white/[0.02] px-5 py-5 text-center">
-                <p className="font-syne text-2xl font-bold">Free</p>
-                <p className="mt-1 text-xs text-gray-500">Delivery on ₹999+</p>
+              <div className="flex-1 rounded-xl border border-white/10 bg-white/[0.02] px-4 py-4 text-center">
+                <p className="font-syne text-xl font-bold">Free</p>
+                <p className="mt-0.5 text-xs text-gray-500">Delivery on $50+</p>
               </div>
             </div>
           </div>
         </section>
 
         {/* Stats */}
-        <section className="mb-12 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        <section className="mb-8 grid grid-cols-1 gap-3 min-[480px]:grid-cols-2 lg:grid-cols-4">
           {stats.map(({ icon: Icon, ...stat }) => (
             <div
               key={stat.title}
-              className="flex items-center gap-4 rounded-2xl border border-white/10 bg-[#111111] p-5 transition duration-300 hover:-translate-y-1 hover:border-[#c8f400]/40"
+              className="flex items-center gap-3 rounded-2xl border border-white/10 bg-[#111111] p-4 transition duration-300 hover:-translate-y-0.5 hover:border-[#c8f400]/40"
             >
               <div
-                className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl ${stat.bg} ${stat.color}`}
+                className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${stat.bg} ${stat.color}`}
               >
-                <Icon size={22} />
+                <Icon size={20} />
               </div>
-              <div>
-                <p className="font-syne text-2xl font-extrabold">
-                  {stat.value}
-                </p>
-                <p className="mt-0.5 text-sm text-gray-400">{stat.title}</p>
-                <p className="mt-0.5 text-xs text-gray-600">{stat.desc}</p>
+              <div className="min-w-0">
+                <p className="font-syne text-xl font-extrabold">{stat.value}</p>
+                <p className="text-sm text-gray-400">{stat.title}</p>
+                <p className="text-xs text-gray-600">{stat.desc}</p>
               </div>
             </div>
           ))}
         </section>
 
         {/* Categories */}
-        <section className="mb-12">
-          <div className="mb-6 flex items-center justify-between">
+        <section className="mb-8">
+          <div className="mb-4 flex items-center justify-between gap-3">
             <div className="flex items-center gap-3">
-              <span className="h-7 w-1 rounded-full bg-[#c8f400]" />
-              <h2 className="font-syne text-xl font-bold tracking-tight sm:text-2xl">
-                Shop by Category
-              </h2>
+              <span className="h-6 w-1 rounded-full bg-[#c8f400]" />
+              <h2 className={sectionTitle}>Shop by Category</h2>
             </div>
             <button
               onClick={() => {
                 navigate("products");
                 setcategory();
               }}
-              className="flex items-center gap-1 text-sm font-medium text-[#c8f400] transition hover:text-white"
+              className="flex shrink-0 items-center gap-1 text-sm font-medium text-[#c8f400] transition hover:text-white"
             >
-              View All <ArrowRight size={15} />
+              View All <ArrowRight size={14} />
             </button>
           </div>
 
-          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">
             {categories.map((category) => (
               <button
                 key={category.name}
@@ -242,9 +260,9 @@ const Home = () => {
                   setcategory(category.name);
                   navigate("products");
                 }}
-                className="group flex min-h-[170px] flex-col items-center justify-center rounded-2xl border border-white/10 bg-[#111111] p-5 text-center transition duration-300 hover:-translate-y-1 hover:border-[#c8f400]/50"
+                className="group flex min-h-[130px] flex-col items-center justify-center rounded-2xl border border-white/10 bg-[#111111] p-4 text-center transition duration-300 hover:-translate-y-0.5 hover:border-[#c8f400]/50"
               >
-                <div className="mb-3 flex h-16 w-16 items-center justify-center rounded-2xl bg-white p-2 transition duration-300 group-hover:scale-105">
+                <div className="mb-2.5 flex h-14 w-14 items-center justify-center rounded-xl bg-white p-2 transition duration-300 group-hover:scale-105">
                   <img
                     src={category.image}
                     alt={category.name}
@@ -254,7 +272,7 @@ const Home = () => {
                 <span className="text-sm font-semibold capitalize text-white">
                   {category.name}
                 </span>
-                <span className="mt-1 text-xs text-gray-500">
+                <span className="mt-0.5 text-xs text-gray-500">
                   {category.count} items
                 </span>
               </button>
@@ -263,16 +281,16 @@ const Home = () => {
         </section>
 
         {/* Top Rated + New Arrivals */}
-        <div className="grid gap-6 lg:grid-cols-2">
+        <div className="grid gap-4 lg:grid-cols-2 lg:gap-6">
           {lists.map(({ title, icon: Icon, accent, items }) => (
             <section
               key={title}
-              className="rounded-3xl border border-white/10 bg-[#111111] p-6 sm:p-7"
+              className="rounded-2xl border border-white/10 bg-[#111111] p-4 sm:p-5"
             >
-              <div className="mb-6 flex items-center justify-between">
-                <h2 className="font-syne flex items-center gap-3 text-xl font-bold">
+              <div className="mb-4 flex items-center justify-between">
+                <h2 className="font-syne flex items-center gap-2.5 text-lg font-bold">
                   <span className={accent}>
-                    <Icon size={22} fill="currentColor" />
+                    <Icon size={20} fill="currentColor" />
                   </span>
                   {title}
                 </h2>
@@ -287,16 +305,16 @@ const Home = () => {
                 </button>
               </div>
 
-              <div className="space-y-3">
+              <div className="space-y-2.5">
                 {items.map((item) => (
                   <div
                     key={`${title}-${item.id}`}
                     onClick={() => {
                       navigate(`/main/${item.id}`);
                     }}
-                    className="flex items-center gap-4 rounded-2xl border border-white/10 bg-white/[0.02] p-3 pr-4 transition duration-300 hover:border-[#c8f400]/40 hover:bg-[#c8f400]/[0.04]"
+                    className="flex cursor-pointer items-center gap-3 rounded-xl border border-white/10 bg-white/[0.02] p-2.5 pr-3 transition duration-300 hover:border-[#c8f400]/40 hover:bg-[#c8f400]/[0.04]"
                   >
-                    <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-white p-1.5">
+                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-white p-1.5">
                       <img
                         src={item.image}
                         alt={item.title}
@@ -317,30 +335,16 @@ const Home = () => {
                       type="button"
                       aria-label="Add to cart"
                       onClick={(e) => {
-                        e.stopPropagation()
+                        e.stopPropagation();
                         addToCart(item);
                         setcartOpen(true);
-                        toast.success("Added to Cart 🛒", {
-                      duration: 2500,
-                      position: "bottom-right",
-                      icon: (
-                        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#c8f400]">
-                          <FaCheck className="text-sm text-[#0c0c0c]" />
-                        </div>
-                      ),
-                      style: {
-                        background: "#141414",
-                        color: "#fff",
-                        border: "1px solid #c8f400",
-                        borderRadius: "10px",
-                        padding: "10px 15px",
-                        fontSize: "14px",
-                        fontWeight: "600",
-                        boxShadow: "0 8px 30px rgba(200, 244, 0, 0.15)",
-                      },
-                    });
+                        if (storeProduct.some((val) => val.id === item.id)) {
+                          toast.success("Quantity Updated", toastBase);
+                        } else {
+                          toast.success("Added to Cart 🛒", toastBase);
+                        }
                       }}
-                      className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#c8f400]/15 text-[#c8f400] transition hover:bg-[#c8f400] hover:text-black"
+                      className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#c8f400]/15 text-[#c8f400] transition hover:bg-[#c8f400] hover:text-black"
                     >
                       <ShoppingBag size={16} />
                     </button>

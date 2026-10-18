@@ -12,14 +12,34 @@ const pageStyles = `
 
 // Props shared by every icon
 const icon = {
-  width: 20,
-  height: 20,
+  width: 18,
+  height: 18,
   viewBox: "0 0 24 24",
   fill: "none",
   stroke: "currentColor",
   strokeWidth: 1.8,
   strokeLinecap: "round",
   strokeLinejoin: "round",
+};
+
+const toastBase = {
+  duration: 2500,
+  position: "bottom-right",
+  icon: (
+    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#c8f400]">
+      <FaCheck className="text-sm text-[#0c0c0c]" />
+    </div>
+  ),
+  style: {
+    background: "#141414",
+    color: "#fff",
+    border: "1px solid #c8f400",
+    borderRadius: "10px",
+    padding: "10px 15px",
+    fontSize: "14px",
+    fontWeight: "600",
+    boxShadow: "0 8px 30px rgba(200, 244, 0, 0.15)",
+  },
 };
 
 // Pages shown in the navbar (change the paths to match your routes)
@@ -63,9 +83,9 @@ const links = [
 // Hover styles use [@media(hover:hover)] so they only apply on devices with a mouse.
 // On touch screens, active: gives the "pressed" feedback instead.
 const iconButtonClass =
-  "grid h-11 w-11 shrink-0 place-items-center rounded-xl border border-white/10 bg-white/[0.04] text-white transition duration-300 active:scale-95 [@media(hover:hover)]:hover:border-[#c8f400]/60 [@media(hover:hover)]:hover:bg-[#c8f400]/10 [@media(hover:hover)]:hover:text-[#c8f400] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#c8f400]";
+  "grid h-10 w-10 shrink-0 place-items-center rounded-xl border border-white/10 bg-white/[0.04] text-white transition duration-300 active:scale-95 [@media(hover:hover)]:hover:border-[#c8f400]/60 [@media(hover:hover)]:hover:bg-[#c8f400]/10 [@media(hover:hover)]:hover:text-[#c8f400] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#c8f400]";
 const logoutButtonClass =
-  "grid h-11 w-11 shrink-0 place-items-center rounded-xl border border-white/10 bg-white/[0.04] text-white transition duration-300 active:scale-95 [@media(hover:hover)]:hover:border-red-400/50 [@media(hover:hover)]:hover:bg-red-400/10 [@media(hover:hover)]:hover:text-red-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-red-400";
+  "grid h-10 w-10 shrink-0 place-items-center rounded-xl border border-white/10 bg-white/[0.04] text-white transition duration-300 active:scale-95 [@media(hover:hover)]:hover:border-red-400/50 [@media(hover:hover)]:hover:bg-red-400/10 [@media(hover:hover)]:hover:text-red-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-red-400";
 
 const Navbar = () => {
   const { login, setLogin, setcartOpen, setstoreProduct } = useContext(Auth);
@@ -97,26 +117,26 @@ const Navbar = () => {
   };
 
   return (
-    <header className="sticky top-0 z-50 border-b border-white/5 bg-black font-['DM_Sans'] text-white">
+    <header className="sticky top-0 z-50 border-b border-white/5 bg-[#0c0c0c]/90 font-['DM_Sans'] text-white backdrop-blur-md">
       <style>{pageStyles}</style>
 
       {/* Thin lime glow along the bottom edge */}
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-[#c8f400]/35 to-transparent" />
 
-      <nav className="mx-auto flex h-[76px] max-w-[1540px] items-center justify-between px-5 sm:px-8 md:grid md:grid-cols-[1fr_auto_1fr]">
+      <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-2 px-3 sm:px-6 lg:px-8 md:grid md:grid-cols-[1fr_auto_1fr]">
         {/* ============ LEFT: LOGO ============ */}
         <button
           type="button"
           onClick={() => goTo("/main")}
           aria-label="SkyMart home"
-          className="group flex items-center gap-3 justify-self-start font-['Syne'] text-2xl font-bold"
+          className="group flex items-center gap-2.5 justify-self-start font-['Syne'] text-xl font-bold"
         >
-          <span className="grid h-10 w-10 place-items-center rounded-xl bg-gradient-to-br from-[#d9ff2e] to-[#a6d400] text-[#0b0b0b] shadow-[0_6px_24px_rgba(200,244,0,0.4)] transition duration-300 [@media(hover:hover)]:group-hover:-rotate-6 [@media(hover:hover)]:group-hover:scale-105">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+          <span className="grid h-9 w-9 place-items-center rounded-xl bg-gradient-to-br from-[#d9ff2e] to-[#a6d400] text-[#0b0b0b] shadow-[0_4px_16px_rgba(200,244,0,0.3)] transition duration-300 [@media(hover:hover)]:group-hover:-rotate-6 [@media(hover:hover)]:group-hover:scale-105">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
               <path d="M13.5 2 5 13.5h6L10 22l9-12h-6.2L13.5 2Z" />
             </svg>
           </span>
-          <span>
+          <span className="max-[359px]:hidden">
             Sky<span className="text-[#c8f400]">Mart</span>
           </span>
         </button>
@@ -128,9 +148,9 @@ const Navbar = () => {
               <button
                 type="button"
                 onClick={() => goTo(link.path)}
-                className={`relative rounded-full px-5 py-2 text-[15px] font-medium transition-all duration-300 ${
+                className={`relative rounded-full px-4 py-1.5 text-sm font-medium transition-all duration-300 ${
                   isActive(link.path)
-                    ? "bg-[#c8f400]/10 text-[#c8f400] shadow-[inset_0_0_0_1px_rgba(200,244,0,0.28),0_0_22px_rgba(200,244,0,0.14)]"
+                    ? "bg-[#c8f400]/10 text-[#c8f400] shadow-[inset_0_0_0_1px_rgba(200,244,0,0.28)]"
                     : "text-[#a3a3a3] [@media(hover:hover)]:hover:bg-white/5 [@media(hover:hover)]:hover:text-white"
                 }`}
               >
@@ -141,15 +161,15 @@ const Navbar = () => {
         </ul>
 
         {/* ============ RIGHT: USER, CART, LOGOUT ============ */}
-        <div className="flex items-center gap-2.5 justify-self-end sm:gap-3">
+        <div className="flex items-center gap-2 justify-self-end">
           {/* User chip */}
-          <div className="flex h-11 items-center gap-2.5 rounded-xl border border-white/10 bg-white/[0.04] p-1.5 sm:pr-4">
+          <div className="flex h-10 items-center gap-2 rounded-xl border border-white/10 bg-white/[0.04] p-1 sm:pr-3">
             <span className="relative grid h-8 w-8 place-items-center rounded-lg bg-gradient-to-br from-[#d9ff2e] to-[#a6d400] font-['Syne'] text-sm font-bold text-[#0b0b0b]">
               {initial}
               {/* small green "online" dot */}
-              <span className="absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-full border-2 border-black bg-[#19d38a]" />
+              <span className="absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-full border-2 border-[#0c0c0c] bg-[#19d38a]" />
             </span>
-            <span className="hidden max-w-[140px] truncate text-[15px] font-medium sm:block">
+            <span className="hidden max-w-[120px] truncate text-sm font-medium sm:block">
               {userName}
             </span>
           </div>
@@ -172,25 +192,7 @@ const Navbar = () => {
           <button
             type="button"
             onClick={() => {
-              toast.success("Logged out. See you soon! 👋", {
-                duration: 2500,
-                position: "bottom-right",
-                icon: (
-                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#c8f400]">
-                    <FaCheck className="text-sm text-[#0c0c0c]" />
-                  </div>
-                ),
-                style: {
-                  background: "#141414",
-                  color: "#fff",
-                  border: "1px solid #c8f400",
-                  borderRadius: "10px",
-                  padding: "10px 15px",
-                  fontSize: "14px",
-                  fontWeight: "600",
-                  boxShadow: "0 8px 30px rgba(200, 244, 0, 0.15)",
-                },
-              });
+              toast.success("Logged out. See you soon! 👋", toastBase);
               handleLogout();
             }}
             aria-label="Log out"
@@ -209,7 +211,7 @@ const Navbar = () => {
             onClick={() => setMenuOpen(!menuOpen)}
             aria-label={menuOpen ? "Close menu" : "Open menu"}
             aria-expanded={menuOpen}
-            className={`grid h-11 w-11 shrink-0 place-items-center rounded-xl border transition duration-300 active:scale-95 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#c8f400] md:hidden ${
+            className={`grid h-10 w-10 shrink-0 place-items-center rounded-xl border transition duration-300 active:scale-95 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#c8f400] md:hidden ${
               menuOpen
                 ? "border-[#c8f400]/60 bg-[#c8f400]/10 text-[#c8f400]"
                 : "border-white/10 bg-white/[0.04] text-white"
@@ -239,17 +241,15 @@ const Navbar = () => {
 
       {/* ============ MOBILE MENU (no hover styles, pressed effect only) ============ */}
       {menuOpen && (
-        <div className="animate-[dropdown_0.25s_ease-out_both] px-4 pb-4 md:hidden">
+        <div className="animate-[dropdown_0.25s_ease-out_both] px-3 pb-3 sm:px-6 md:hidden">
           <div className="rounded-2xl border border-white/10 bg-[#0d0d0d] p-2 shadow-[0_20px_50px_rgba(0,0,0,0.6)]">
             {/* User info (the navbar only shows the avatar on small phones) */}
-            <div className="mb-1 flex items-center gap-3 rounded-xl bg-white/[0.04] px-4 py-3 sm:hidden">
-              <span className="grid h-9 w-9 place-items-center rounded-lg bg-gradient-to-br from-[#d9ff2e] to-[#a6d400] font-['Syne'] text-sm font-bold text-[#0b0b0b]">
+            <div className="mb-1 flex items-center gap-3 rounded-xl bg-white/[0.04] px-3 py-2.5 sm:hidden">
+              <span className="grid h-8 w-8 place-items-center rounded-lg bg-gradient-to-br from-[#d9ff2e] to-[#a6d400] font-['Syne'] text-sm font-bold text-[#0b0b0b]">
                 {initial}
               </span>
               <div className="min-w-0">
-                <div className="truncate text-[15px] font-medium">
-                  {userName}
-                </div>
+                <div className="truncate text-sm font-medium">{userName}</div>
                 <div className="text-xs text-[#8a8a8a]">Signed in</div>
               </div>
             </div>
@@ -260,15 +260,13 @@ const Navbar = () => {
                   <button
                     type="button"
                     onClick={() => goTo(link.path)}
-                    className={`flex w-full items-center gap-3 rounded-xl px-4 py-3.5 text-left text-base font-medium transition duration-200 active:scale-[0.98] ${
+                    className={`flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left text-sm font-medium transition duration-200 active:scale-[0.98] ${
                       isActive(link.path)
                         ? "bg-[#c8f400]/10 text-[#c8f400]"
                         : "text-[#a3a3a3] active:bg-white/10 active:text-white"
                     }`}
                   >
-                    <svg {...icon} width="20" height="20">
-                      {link.iconPath}
-                    </svg>
+                    <svg {...icon}>{link.iconPath}</svg>
                     <span className="flex-1">{link.label}</span>
                     {isActive(link.path) && (
                       <span className="h-1.5 w-1.5 rounded-full bg-[#c8f400] shadow-[0_0_10px_#c8f400]" />

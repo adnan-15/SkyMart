@@ -6,28 +6,27 @@ import { useContext } from "react";
 import { Auth } from "../context/AuthContext";
 
 const MainLayout = () => {
-  let {cartOpen} = useContext(Auth)
+  let { cartOpen } = useContext(Auth);
   return (
-    <div className="flex min-h-screen flex-col bg-[#0c0c0c] text-white">
+    <div className="flex min-h-screen flex-col overflow-x-hidden bg-[#0c0c0c] text-white">
       {/* Fixed Navbar */}
-      <header className="fixed inset-x-0 top-0 z-50  bg-[#0c0c0c]/70 backdrop-blur-md opacity-90">
+      <div className="fixed inset-x-0 top-0 z-50">
         <Navbar />
-      </header>
+      </div>
 
-      {/* Main Content (pt-20 = navbar height, so content doesn't hide under it) */}
-      <main className="flex-1 pt-20">
-         <Outlet />
-        {cartOpen && <Cart/>}
+      {/* Main Content (pt-16 = navbar height, so content doesn't hide under it) */}
+      <main className="flex-1 pt-16">
+        <Outlet />
+        {cartOpen && <Cart />}
       </main>
 
       {/* Footer */}
-      <footer className="mt-auto border-t border-white/70 bg-[#0c0c0c] px-5 py-6">
-        <div className="mx-auto flex flex-col items-center justify-center text-center">
-          <h2 className="text-xl font-medium tracking-tight text-[#c8f400]">
+      <footer className="mt-auto border-t border-white/10 bg-[#0c0c0c] px-4 py-5 sm:px-6">
+        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-1.5 text-center sm:flex-row sm:text-left">
+          <h2 className="font-syne text-base font-bold tracking-tight text-[#c8f400]">
             SkyMart
           </h2>
-
-          <p className="mt-2 text-xs text-gray-500 sm:text-sm">
+          <p className="text-xs text-gray-500">
             © {new Date().getFullYear()} SkyMart • Built with React + Tailwind
           </p>
         </div>

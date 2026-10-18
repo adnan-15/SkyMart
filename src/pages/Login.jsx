@@ -7,6 +7,7 @@ const pageStyles = `
   @keyframes float { 0%,100% { transform: translateY(0) } 50% { transform: translateY(-14px) } }
   @keyframes drift { 0%,100% { transform: translate(0,0) scale(1) } 50% { transform: translate(50px,-40px) scale(1.18) } }
   @keyframes rise  { from { opacity: 0; transform: translateY(20px) } to { opacity: 1; transform: none } }
+  @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important } }
 `;
 
 // Props shared by every icon
@@ -23,16 +24,16 @@ const icon = {
 
 // Shared Tailwind classes
 const inputClass =
-  "peer h-[clamp(46px,7vh,62px)] w-full rounded-2xl border border-white/10 bg-white/[0.04] pb-0 pl-[52px] pr-[52px] pt-[clamp(15px,2.8vh,22px)] text-[15px] text-white outline-none transition duration-300 hover:border-white/20 focus:border-[#c8f400]/70 focus:bg-white/[0.07] focus:shadow-[0_0_0_4px_rgba(200,244,0,0.12),0_8px_30px_rgba(200,244,0,0.08)]";
+  "peer h-12 w-full rounded-xl border border-white/10 bg-white/[0.04] pb-0 pl-11 pr-11 pt-5 text-sm text-white outline-none transition duration-300 hover:border-white/20 focus:border-[#c8f400]/70 focus:bg-white/[0.07] focus:shadow-[0_0_0_3px_rgba(200,244,0,0.12)]";
 const labelClass =
-  "pointer-events-none absolute left-[52px] top-1/2 -translate-y-1/2 text-[15px] text-[#7a7a7a] transition-all duration-200 peer-focus:top-[32%] peer-focus:text-[11px] peer-focus:text-[#c8f400] peer-[:not(:placeholder-shown)]:top-[32%] peer-[:not(:placeholder-shown)]:text-[11px]";
+  "pointer-events-none absolute left-11 top-1/2 -translate-y-1/2 text-sm text-[#7a7a7a] transition-all duration-200 peer-focus:top-[32%] peer-focus:text-[11px] peer-focus:text-[#c8f400] peer-[:not(:placeholder-shown)]:top-[32%] peer-[:not(:placeholder-shown)]:text-[11px]";
 const leftIconClass =
-  "pointer-events-none absolute left-[18px] top-1/2 z-10 -translate-y-1/2 text-[#6f6f6f] transition-colors duration-300 group-focus-within:text-[#c8f400]";
+  "pointer-events-none absolute left-4 top-1/2 z-10 -translate-y-1/2 text-[#6f6f6f] transition-colors duration-300 group-focus-within:text-[#c8f400]";
 const eyeButtonClass =
-  "absolute right-2.5 top-1/2 z-10 grid h-9 w-9 -translate-y-1/2 place-items-center rounded-xl text-[#7a7a7a] transition hover:bg-white/10 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#c8f400]";
+  "absolute right-2 top-1/2 z-10 grid h-8 w-8 -translate-y-1/2 place-items-center rounded-lg text-[#7a7a7a] transition hover:bg-white/10 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#c8f400]";
 const submitButtonClass =
-  "group/btn relative mt-[clamp(14px,2.6vh,28px)] flex h-[clamp(46px,7vh,62px)] w-full items-center justify-center gap-2.5 overflow-hidden rounded-2xl bg-gradient-to-r from-[#d4ff1f] to-[#b6e600] font-['Syne'] text-[17px] font-bold text-[#0b0b0b] shadow-[0_10px_34px_rgba(200,244,0,0.25)] transition duration-300 hover:-translate-y-0.5 hover:shadow-[0_16px_44px_rgba(200,244,0,0.4)] active:translate-y-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white";
-const errorClass = "px-1 pt-1.5 text-xs text-red-400";
+  "group/btn relative mt-5 flex h-12 w-full items-center justify-center gap-2 overflow-hidden rounded-xl bg-gradient-to-r from-[#d4ff1f] to-[#b6e600] font-['Syne'] text-base font-bold text-[#0b0b0b] shadow-[0_8px_26px_rgba(200,244,0,0.22)] transition duration-300 hover:-translate-y-0.5 hover:shadow-[0_12px_34px_rgba(200,244,0,0.35)] active:translate-y-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white";
+const errorClass = "px-1 pt-1 text-xs text-red-400";
 
 const LoginPage = () => {
   // Show / hide password
@@ -45,14 +46,14 @@ const LoginPage = () => {
     loginFormSubmit} = useAuth();
 
   return (
-    <div className="grid h-[100dvh] grid-cols-1 grid-rows-1 overflow-hidden bg-[#070707] font-['DM_Sans'] text-white antialiased lg:grid-cols-[1.05fr_1fr]">
+    <div className="grid min-h-[100dvh] grid-cols-1 overflow-x-hidden bg-[#070707] font-['DM_Sans'] text-white antialiased lg:h-[100dvh] lg:grid-cols-[1.05fr_1fr] lg:grid-rows-1 lg:overflow-hidden">
       <style>{pageStyles}</style>
 
       {/* ================= LEFT: HERO ================= */}
-      <section className="relative hidden flex-col justify-between overflow-hidden p-[clamp(32px,5vh,60px)] lg:flex">
+      <section className="relative hidden flex-col justify-between overflow-hidden p-10 lg:flex xl:p-12">
         {/* Moving colour glows */}
-        <div className="pointer-events-none absolute -left-32 top-1/4 h-[460px] w-[460px] animate-[drift_14s_ease-in-out_infinite] rounded-full bg-[#c8f400]/25 blur-[120px]" />
-        <div className="pointer-events-none absolute -bottom-24 right-0 h-[380px] w-[380px] animate-[drift_18s_ease-in-out_infinite_reverse] rounded-full bg-[#19d38a]/20 blur-[120px]" />
+        <div className="pointer-events-none absolute -left-32 top-1/4 h-[420px] w-[420px] animate-[drift_14s_ease-in-out_infinite] rounded-full bg-[#c8f400]/25 blur-[120px]" />
+        <div className="pointer-events-none absolute -bottom-24 right-0 h-[340px] w-[340px] animate-[drift_18s_ease-in-out_infinite_reverse] rounded-full bg-[#19d38a]/20 blur-[120px]" />
 
         {/* Faint grid */}
         <div
@@ -60,15 +61,15 @@ const LoginPage = () => {
           style={{
             backgroundImage:
               "linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)",
-            backgroundSize: "64px 64px",
+            backgroundSize: "56px 56px",
             maskImage: "radial-gradient(ellipse at 30% 55%, #000 0%, transparent 70%)",
             WebkitMaskImage: "radial-gradient(ellipse at 30% 55%, #000 0%, transparent 70%)",
           }}
         />
 
         {/* Logo */}
-        <div className="relative flex items-center gap-3 font-['Syne'] text-[length:clamp(20px,3.4vh,24px)] font-bold">
-          <div className="grid h-[clamp(36px,6vh,48px)] w-[clamp(36px,6vh,48px)] place-items-center rounded-[14px] bg-gradient-to-br from-[#d9ff2e] to-[#a6d400] text-[#0b0b0b] shadow-[0_8px_30px_rgba(200,244,0,0.45)]">
+        <div className="relative flex items-center gap-2.5 font-['Syne'] text-xl font-bold">
+          <div className="grid h-10 w-10 place-items-center rounded-xl bg-gradient-to-br from-[#d9ff2e] to-[#a6d400] text-[#0b0b0b] shadow-[0_6px_22px_rgba(200,244,0,0.4)]">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
               <path d="M13.5 2 5 13.5h6L10 22l9-12h-6.2L13.5 2Z" />
             </svg>
@@ -79,14 +80,14 @@ const LoginPage = () => {
         </div>
 
         {/* Floating product card (only on big, tall screens) */}
-        <div className="absolute right-10 top-[9%] hidden w-[210px] animate-[float_7s_ease-in-out_infinite] rounded-3xl border border-white/10 bg-white/[0.05] p-3 shadow-[0_24px_60px_rgba(0,0,0,0.5)] backdrop-blur-xl [@media(min-width:1536px)_and_(min-height:820px)]:block">
-          <div className="grid h-[104px] place-items-center rounded-2xl bg-gradient-to-br from-[#d9ff2e] via-[#5fe39a] to-[#0d3b2c] text-[#0b0b0b]">
-            <svg width="38" height="38" viewBox="0 0 24 24" fill="currentColor">
+        <div className="absolute right-10 top-[9%] hidden w-[190px] animate-[float_7s_ease-in-out_infinite] rounded-2xl border border-white/10 bg-white/[0.05] p-3 shadow-[0_24px_60px_rgba(0,0,0,0.5)] backdrop-blur-xl [@media(min-width:1536px)_and_(min-height:820px)]:block">
+          <div className="grid h-24 place-items-center rounded-xl bg-gradient-to-br from-[#d9ff2e] via-[#5fe39a] to-[#0d3b2c] text-[#0b0b0b]">
+            <svg width="34" height="34" viewBox="0 0 24 24" fill="currentColor">
               <path d="M13.5 2 5 13.5h6L10 22l9-12h-6.2L13.5 2Z" />
             </svg>
           </div>
-          <div className="mt-3 px-1 pb-1">
-            <div className="font-['Syne'] text-[15px] font-semibold">Aero Buds Pro</div>
+          <div className="mt-2.5 px-1 pb-1">
+            <div className="font-['Syne'] text-sm font-semibold">Aero Buds Pro</div>
             <div className="mt-1 flex items-center justify-between text-sm">
               <span className="text-[#9a9a9a]">★ 4.9</span>
               <span className="font-semibold text-[#c8f400]">$129</span>
@@ -95,8 +96,8 @@ const LoginPage = () => {
         </div>
 
         {/* Floating delivery card (only on big, tall screens) */}
-        <div className="absolute right-10 top-[64%] hidden w-[230px] animate-[float_8s_ease-in-out_infinite] items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.05] p-3.5 shadow-[0_24px_60px_rgba(0,0,0,0.5)] backdrop-blur-xl [animation-delay:1.5s] [@media(min-width:1536px)_and_(min-height:820px)]:flex">
-          <div className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-[#c8f400] text-[#0b0b0b]">
+        <div className="absolute right-10 top-[64%] hidden w-[220px] animate-[float_8s_ease-in-out_infinite] items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.05] p-3 shadow-[0_24px_60px_rgba(0,0,0,0.5)] backdrop-blur-xl [animation-delay:1.5s] [@media(min-width:1536px)_and_(min-height:820px)]:flex">
+          <div className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-[#c8f400] text-[#0b0b0b]">
             <svg {...icon} width="16" height="16" strokeWidth="2.6">
               <path d="m5 12.5 4.5 4.5L19 7.5" />
             </svg>
@@ -108,58 +109,58 @@ const LoginPage = () => {
         </div>
 
         {/* Headline */}
-        <div className="relative py-[clamp(8px,3vh,48px)]">
-          <div className="inline-flex items-center gap-2 rounded-full border border-[#c8f400]/30 bg-[#c8f400]/10 px-4 py-1.5 text-sm font-medium text-[#c8f400]">
+        <div className="relative py-6">
+          <div className="inline-flex items-center gap-2 rounded-full border border-[#c8f400]/30 bg-[#c8f400]/10 px-3.5 py-1 text-xs font-medium text-[#c8f400]">
             <span className="h-1.5 w-1.5 rounded-full bg-[#c8f400] shadow-[0_0_10px_#c8f400]" />
             Welcome back
           </div>
 
-          <h1 className="my-[clamp(12px,2.4vh,24px)] font-['Syne'] text-[length:clamp(36px,min(4.6vw,7.2vh),66px)] font-extrabold leading-[1.03] tracking-[-0.035em]">
+          <h1 className="my-4 font-['Syne'] text-4xl font-extrabold leading-[1.05] tracking-[-0.03em] xl:text-5xl">
             Shop the future.
             <span className="block bg-gradient-to-r from-[#c8f400] via-[#a8ee3a] to-[#4de8a0] bg-clip-text text-transparent">
               Today.
             </span>
           </h1>
 
-          <p className="max-w-[440px] text-[length:clamp(15px,2.2vh,18px)] leading-[1.7] text-[#9a9a9a] [@media(max-height:640px)]:hidden">
+          <p className="max-w-[420px] text-base leading-7 text-[#9a9a9a] [@media(max-height:640px)]:hidden">
             Thousands of products, lightning-fast delivery, and prices that make your wallet happy.
           </p>
         </div>
 
         {/* Stats */}
-        <div className="relative grid grid-cols-3 divide-x divide-white/10 rounded-3xl border border-white/10 bg-white/[0.03] py-[clamp(12px,2.6vh,24px)] backdrop-blur-md">
+        <div className="relative grid grid-cols-3 divide-x divide-white/10 rounded-2xl border border-white/10 bg-white/[0.03] py-4 backdrop-blur-md">
           <div className="text-center">
-            <b className="block font-['Syne'] text-[length:clamp(20px,3.4vh,28px)] font-bold">20K+</b>
-            <small className="text-sm text-[#8a8a8a]">Products</small>
+            <b className="block font-['Syne'] text-xl font-bold">20K+</b>
+            <small className="text-xs text-[#8a8a8a]">Products</small>
           </div>
           <div className="text-center">
-            <b className="block font-['Syne'] text-[length:clamp(20px,3.4vh,28px)] font-bold">50K+</b>
-            <small className="text-sm text-[#8a8a8a]">Users</small>
+            <b className="block font-['Syne'] text-xl font-bold">50K+</b>
+            <small className="text-xs text-[#8a8a8a]">Users</small>
           </div>
           <div className="text-center">
-            <b className="block font-['Syne'] text-[length:clamp(20px,3.4vh,28px)] font-bold">4.9★</b>
-            <small className="text-sm text-[#8a8a8a]">Rating</small>
+            <b className="block font-['Syne'] text-xl font-bold">4.9★</b>
+            <small className="text-xs text-[#8a8a8a]">Rating</small>
           </div>
         </div>
       </section>
 
       {/* ================= RIGHT: FORM ================= */}
-      <section className="relative grid h-full place-items-center overflow-hidden px-5">
+      <section className="relative grid place-items-center overflow-hidden px-4 py-8 sm:px-6 lg:h-full lg:overflow-y-auto">
         {/* Soft glow behind the card */}
-        <div className="pointer-events-none absolute left-1/2 top-1/2 h-[520px] w-[520px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#c8f400]/[0.07] blur-[110px]" />
+        <div className="pointer-events-none absolute left-1/2 top-1/2 h-[420px] w-[420px] max-w-full -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#c8f400]/[0.07] blur-[110px]" />
 
         {/* Gradient border wrapper */}
-        <div className="relative w-full max-w-[520px] animate-[rise_0.8s_ease-out_both] rounded-[34px] bg-gradient-to-b from-[#c8f400]/45 via-white/10 to-white/[0.03] p-px shadow-[0_40px_100px_rgba(0,0,0,0.7)]">
+        <div className="relative w-full max-w-[440px] animate-[rise_0.8s_ease-out_both] rounded-3xl bg-gradient-to-b from-[#c8f400]/45 via-white/10 to-white/[0.03] p-px shadow-[0_30px_80px_rgba(0,0,0,0.7)]">
           {/* noValidate: lets react-hook-form show the errors instead of the browser's popups */}
           <form
             noValidate
-            className="rounded-[33px] bg-[#0f0f0f]/95 p-[clamp(22px,4.5vh,44px)] backdrop-blur-2xl"
+            className="rounded-[23px] bg-[#0f0f0f]/95 p-6 backdrop-blur-2xl sm:p-8"
             onSubmit={handleSubmit(loginFormSubmit)}
           >
             {/* Logo (small screens only, because the hero is hidden there) */}
-            <div className="mb-[clamp(14px,3vh,32px)] flex items-center gap-3 font-['Syne'] text-xl font-bold lg:hidden">
-              <div className="grid h-10 w-10 place-items-center rounded-xl bg-gradient-to-br from-[#d9ff2e] to-[#a6d400] text-[#0b0b0b]">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+            <div className="mb-5 flex items-center gap-2.5 font-['Syne'] text-lg font-bold lg:hidden">
+              <div className="grid h-9 w-9 place-items-center rounded-xl bg-gradient-to-br from-[#d9ff2e] to-[#a6d400] text-[#0b0b0b]">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M13.5 2 5 13.5h6L10 22l9-12h-6.2L13.5 2Z" />
                 </svg>
               </div>
@@ -168,14 +169,14 @@ const LoginPage = () => {
               </div>
             </div>
 
-            <h2 className="font-['Syne'] text-[length:clamp(26px,4.2vh,34px)] font-bold leading-tight tracking-[-0.025em]">
+            <h2 className="font-['Syne'] text-2xl font-bold leading-tight tracking-[-0.02em]">
               Sign in
             </h2>
-            <p className="mb-[clamp(14px,3.4vh,36px)] mt-1.5 text-[15px] text-[#8a8a8a]">
+            <p className="mb-6 mt-1 text-sm text-[#8a8a8a]">
               Enter your credentials to continue
             </p>
 
-            <div className="space-y-[clamp(10px,1.8vh,16px)]">
+            <div className="space-y-3">
               {/* Email */}
               <div>
                 <div className="group relative">
@@ -249,8 +250,8 @@ const LoginPage = () => {
               <span className="relative">Sign in</span>
               <svg
                 {...icon}
-                width="20"
-                height="20"
+                width="18"
+                height="18"
                 strokeWidth="2.2"
                 className="relative transition-transform duration-300 group-hover/btn:translate-x-1"
               >
@@ -259,7 +260,7 @@ const LoginPage = () => {
             </button>
 
             {/* Register link */}
-            <p className="mt-[clamp(14px,3vh,32px)] text-center text-[15px] text-[#8a8a8a]">
+            <p className="mt-5 text-center text-sm text-[#8a8a8a]">
               Don&apos;t have an account?{" "}
               <button
                 type="button"

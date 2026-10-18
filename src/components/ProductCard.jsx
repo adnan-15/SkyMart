@@ -6,6 +6,26 @@ import toast from "react-hot-toast";
 import { FaCheck } from "react-icons/fa6";
 import { Check } from "lucide-react";
 
+const toastBase = {
+  duration: 2500,
+  position: "bottom-right",
+  icon: (
+    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#c8f400]">
+      <FaCheck className="text-sm text-[#0c0c0c]" />
+    </div>
+  ),
+  style: {
+    background: "#141414",
+    color: "#fff",
+    border: "1px solid #c8f400",
+    borderRadius: "10px",
+    padding: "10px 15px",
+    fontSize: "14px",
+    fontWeight: "600",
+    boxShadow: "0 8px 30px rgba(200, 244, 0, 0.15)",
+  },
+};
+
 const ProductCard = ({ product, index = 0 }) => {
   let { image, title, category, price, rating, id } = product;
 
@@ -18,14 +38,8 @@ const ProductCard = ({ product, index = 0 }) => {
     <>
       <style>{`
         @keyframes card-enter {
-          from {
-            opacity: 0;
-            transform: translateY(22px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
+          from { opacity: 0; transform: translateY(16px); }
+          to { opacity: 1; transform: translateY(0); }
         }
 
         @keyframes lime-pulse {
@@ -34,7 +48,7 @@ const ProductCard = ({ product, index = 0 }) => {
         }
 
         .product-enter {
-          animation: card-enter 650ms cubic-bezier(.22,1,.36,1) both;
+          animation: card-enter 550ms cubic-bezier(.22,1,.36,1) both;
           animation-delay: var(--delay, 0ms);
         }
 
@@ -53,49 +67,43 @@ const ProductCard = ({ product, index = 0 }) => {
       `}</style>
 
       <article
-        style={{ "--delay": `${Math.min(index, 10) * 65}ms` }}
+        style={{ "--delay": `${Math.min(index, 10) * 55}ms` }}
         onClick={() => {
           navigate(`/main/${id}`);
         }}
-        className="product-enter product-card group overflow-hidden rounded-[26px] border border-white/[0.08] bg-[#141414] transition-[transform,border-color,box-shadow] duration-500 ease-[cubic-bezier(.22,1,.36,1)] hover:-translate-y-2 hover:border-[#c8f400]/40 hover:shadow-[0_20px_45px_rgba(0,0,0,.4)]"
+        className="product-enter product-card group flex cursor-pointer flex-col overflow-hidden rounded-2xl border border-white/10 bg-[#111111] transition-[transform,border-color,box-shadow] duration-300 hover:-translate-y-1 hover:border-[#c8f400]/40 hover:shadow-[0_16px_36px_rgba(0,0,0,.4)]"
       >
         {/* Image */}
-        <div className="relative m-2.5 flex h-[255px] items-center justify-center overflow-hidden rounded-[20px] bg-gradient-to-br from-white via-[#fafafa] to-[#e9e9e9] p-7">
-          <div className="product-glow pointer-events-none absolute h-36 w-36 rounded-full bg-[#c8f400]/15 blur-3xl" />
+        <div className="relative m-2 flex h-44 items-center justify-center overflow-hidden rounded-xl bg-gradient-to-br from-white via-[#fafafa] to-[#e9e9e9] p-5 sm:h-48">
+          <div className="product-glow pointer-events-none absolute h-28 w-28 rounded-full bg-[#c8f400]/15 blur-3xl" />
 
           {image ? (
             <img
               src={image}
               alt={title}
               loading="lazy"
-              className="relative z-10 h-full w-full object-contain transition-transform duration-700 ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-[1.09]"
+              className="relative z-10 h-full w-full object-contain transition-transform duration-500 group-hover:scale-105"
             />
           ) : (
             <div className="text-sm text-gray-400">Product Image</div>
           )}
 
-          <span className="absolute left-3 top-3 z-20 max-w-[75%] truncate rounded-full border border-black/5 bg-white/90 px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-[#333] shadow-sm backdrop-blur-md">
+          <span className="absolute left-2.5 top-2.5 z-20 max-w-[75%] truncate rounded-full border border-black/5 bg-white/90 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-[#333] shadow-sm backdrop-blur-md">
             {category}
           </span>
-
-          <span className="absolute bottom-3 left-1/2 z-20 h-1 w-7 -translate-x-1/2 rounded-full bg-black/10 transition-all duration-500 group-hover:w-14 group-hover:bg-[#c8f400]" />
         </div>
 
         {/* Details */}
-        <div className="px-4 pb-5 pt-2 sm:px-5">
-          <p className="mb-2 truncate text-[10px] font-bold uppercase tracking-[.18em] text-[#c8f400]/80">
-            {category}
-          </p>
-
-          <h2 className="mb-2 line-clamp-2 min-h-[44px] text-[15px] font-semibold leading-[1.5] text-white transition-colors duration-500 group-hover:text-[#c8f400]">
+        <div className="flex flex-1 flex-col px-3.5 pb-4 pt-1.5">
+          <h2 className="mb-1.5 line-clamp-2 min-h-[40px] text-sm font-semibold leading-5 text-white transition-colors duration-300 group-hover:text-[#c8f400]">
             {title}
           </h2>
 
           {/* Rating UI */}
-          <div className="mb-4 flex min-h-5 items-center gap-2">
+          <div className="mb-3 flex min-h-5 items-center gap-1.5">
             {rating?.rate != null && Number.isFinite(Number(rating.rate)) ? (
               <>
-                <div className="flex gap-0.5 text-sm text-[#ffc400]">
+                <div className="flex gap-0.5 text-xs text-[#ffc400]">
                   {Array.from({ length: 5 }, (_, i) => (
                     <span key={i}>
                       {i < Math.round(Number(rating.rate)) ? "★" : "☆"}
@@ -114,50 +122,24 @@ const ProductCard = ({ product, index = 0 }) => {
             )}
           </div>
 
-          <div className="mb-4 h-px bg-gradient-to-r from-white/20 via-white/10 to-transparent" />
-
           {/* Price and button UI */}
-          <div className="flex items-center justify-between gap-2">
-            <div className="min-w-0">
-              <p className="mb-1 text-[9px] font-semibold uppercase tracking-widest text-gray-500">
-                Price
-              </p>
-
-              <p className="truncate text-xl font-extrabold tracking-tight text-[#c8f400]">
-                ${Number(price ?? 0).toFixed(2)}
-              </p>
-            </div>
+          <div className="mt-auto flex items-center justify-between gap-2 border-t border-white/10 pt-3">
+            <p className="min-w-0 truncate font-syne text-lg font-extrabold tracking-tight text-[#c8f400]">
+              ${Number(price ?? 0).toFixed(2)}
+            </p>
 
             {storeProduct.some((val) => val.id === id) ? (
               <button
-                aria-label="Wishlist"
+                aria-label="Update quantity"
                 onClick={(e) => {
                   e.stopPropagation();
                   addToCart(product);
                   setcartOpen(true);
-                  toast.success("Quantity Updated!", {
-                    duration: 2500,
-                    position: "bottom-right",
-                    icon: (
-                      <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#c8f400]">
-                        <FaCheck className="text-sm text-[#0c0c0c]" />
-                      </div>
-                    ),
-                    style: {
-                      background: "#141414",
-                      color: "#fff",
-                      border: "1px solid #c8f400",
-                      borderRadius: "10px",
-                      padding: "10px 15px",
-                      fontSize: "14px",
-                      fontWeight: "600",
-                      boxShadow: "0 8px 30px rgba(200, 244, 0, 0.15)",
-                    },
-                  });
+                  toast.success("Quantity Updated!", toastBase);
                 }}
-                className="group/added relative flex shrink-0 items-center gap-2 overflow-hidden rounded-xl border border-green-400/30 bg-green-400/10 px-3 py-2.5 text-xs font-extrabold text-green-400 transition-[transform,background-color,box-shadow] duration-300 hover:scale-105 hover:bg-green-400/20 hover:shadow-[0_5px_22px_rgba(74,222,128,.15)] active:scale-95"
+                className="flex shrink-0 items-center gap-1.5 rounded-lg border border-green-400/30 bg-green-400/10 px-3 py-2 text-xs font-bold text-green-400 transition duration-300 hover:bg-green-400/20 active:scale-95"
               >
-                <Check size={16} /> Added
+                <Check size={14} /> Added
               </button>
             ) : (
               <button
@@ -166,34 +148,16 @@ const ProductCard = ({ product, index = 0 }) => {
                   e.stopPropagation();
                   addToCart(product);
                   setcartOpen(true);
-                  toast.success("Added to Cart 🛒", {
-                    duration: 2500,
-                    position: "bottom-right",
-                    icon: (
-                      <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#c8f400]">
-                        <FaCheck className="text-sm text-[#0c0c0c]" />
-                      </div>
-                    ),
-                    style: {
-                      background: "#141414",
-                      color: "#fff",
-                      border: "1px solid #c8f400",
-                      borderRadius: "10px",
-                      padding: "10px 15px",
-                      fontSize: "14px",
-                      fontWeight: "600",
-                      boxShadow: "0 8px 30px rgba(200, 244, 0, 0.15)",
-                    },
-                  });
+                  toast.success("Added to Cart 🛒", toastBase);
                 }}
-                className="group/add relative flex shrink-0 items-center gap-2 overflow-hidden rounded-full bg-[#c8f400] px-4 py-2.5 text-xs font-extrabold text-black transition-[transform,background-color,box-shadow] duration-300 ease-out hover:scale-105 hover:bg-[#dcff35] hover:shadow-[0_5px_22px_rgba(200,244,0,.25)] active:scale-95"
+                className="group/add relative flex shrink-0 items-center gap-1.5 overflow-hidden rounded-lg bg-[#c8f400] px-3.5 py-2 text-xs font-bold text-black transition duration-300 hover:bg-[#dcff35] hover:shadow-[0_4px_16px_rgba(200,244,0,.25)] active:scale-95"
               >
                 <span className="pointer-events-none absolute inset-0 -translate-x-[150%] skew-x-[-20deg] bg-white/40 transition-transform duration-700 group-hover/add:translate-x-[180%]" />
 
                 <svg
-                  className="relative transition-transform duration-300 group-hover/add:-rotate-6"
-                  width="16"
-                  height="16"
+                  className="relative"
+                  width="14"
+                  height="14"
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
