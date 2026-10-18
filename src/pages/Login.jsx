@@ -39,11 +39,8 @@ const LoginPage = () => {
   // Show / hide password
   const [showPassword, setShowPassword] = useState(false);
 
-  const { navigate,
-    register,
-    handleSubmit,
-    errors,
-    loginFormSubmit} = useAuth();
+  const { navigate, register, handleSubmit, errors, loginFormSubmit } =
+    useAuth();
 
   return (
     <div className="grid min-h-[100dvh] grid-cols-1 overflow-x-hidden bg-[#070707] font-['DM_Sans'] text-white antialiased lg:h-[100dvh] lg:grid-cols-[1.05fr_1fr] lg:grid-rows-1 lg:overflow-hidden">
@@ -62,18 +59,24 @@ const LoginPage = () => {
             backgroundImage:
               "linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)",
             backgroundSize: "56px 56px",
-            maskImage: "radial-gradient(ellipse at 30% 55%, #000 0%, transparent 70%)",
-            WebkitMaskImage: "radial-gradient(ellipse at 30% 55%, #000 0%, transparent 70%)",
+            maskImage:
+              "radial-gradient(ellipse at 30% 55%, #000 0%, transparent 70%)",
+            WebkitMaskImage:
+              "radial-gradient(ellipse at 30% 55%, #000 0%, transparent 70%)",
           }}
         />
 
         {/* Logo */}
+
         <div className="relative flex items-center gap-2.5 font-['Syne'] text-xl font-bold">
-          <div className="grid h-10 w-10 place-items-center rounded-xl bg-gradient-to-br from-[#d9ff2e] to-[#a6d400] text-[#0b0b0b] shadow-[0_6px_22px_rgba(200,244,0,0.4)]">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M13.5 2 5 13.5h6L10 22l9-12h-6.2L13.5 2Z" />
-            </svg>
+          <div className="grid h-10 w-10 shrink-0 place-items-center overflow-hidden rounded-xl  ">
+            <img
+              src="/favicon.png"
+              alt="SkyMart Logo"
+              className="h-full w-full object-contain"
+            />
           </div>
+
           <div>
             Sky<span className="text-[#c8f400]">Mart</span>
           </div>
@@ -87,7 +90,9 @@ const LoginPage = () => {
             </svg>
           </div>
           <div className="mt-2.5 px-1 pb-1">
-            <div className="font-['Syne'] text-sm font-semibold">Aero Buds Pro</div>
+            <div className="font-['Syne'] text-sm font-semibold">
+              Aero Buds Pro
+            </div>
             <div className="mt-1 flex items-center justify-between text-sm">
               <span className="text-[#9a9a9a]">★ 4.9</span>
               <span className="font-semibold text-[#c8f400]">$129</span>
@@ -123,7 +128,8 @@ const LoginPage = () => {
           </h1>
 
           <p className="max-w-[420px] text-base leading-7 text-[#9a9a9a] [@media(max-height:640px)]:hidden">
-            Thousands of products, lightning-fast delivery, and prices that make your wallet happy.
+            Thousands of products, lightning-fast delivery, and prices that make
+            your wallet happy.
           </p>
         </div>
 
@@ -160,7 +166,12 @@ const LoginPage = () => {
             {/* Logo (small screens only, because the hero is hidden there) */}
             <div className="mb-5 flex items-center gap-2.5 font-['Syne'] text-lg font-bold lg:hidden">
               <div className="grid h-9 w-9 place-items-center rounded-xl bg-gradient-to-br from-[#d9ff2e] to-[#a6d400] text-[#0b0b0b]">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                >
                   <path d="M13.5 2 5 13.5h6L10 22l9-12h-6.2L13.5 2Z" />
                 </svg>
               </div>
@@ -212,7 +223,9 @@ const LoginPage = () => {
                     type={showPassword ? "text" : "password"}
                     placeholder=" "
                     className={inputClass}
-                    {...register("password", { required: "Password is required" })}
+                    {...register("password", {
+                      required: "Password is required",
+                    })}
                   />
                   <label className={labelClass}>Password</label>
 
@@ -220,7 +233,9 @@ const LoginPage = () => {
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    aria-label={showPassword ? "Hide password" : "Show password"}
+                    aria-label={
+                      showPassword ? "Hide password" : "Show password"
+                    }
                     className={eyeButtonClass}
                   >
                     {showPassword ? (

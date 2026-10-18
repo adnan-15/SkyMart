@@ -39,10 +39,30 @@ const About = () => {
   ];
 
   const team = [
-    { name: "Aryan Shah", role: "Founder & CEO", initial: "A", color: "bg-[#c8f400]" },
-    { name: "Priya Mehta", role: "Head of Product", initial: "P", color: "bg-blue-500" },
-    { name: "Rohan Verma", role: "Lead Engineer", initial: "R", color: "bg-purple-500" },
-    { name: "Sneha Kapoor", role: "Design Director", initial: "S", color: "bg-rose-500" },
+    {
+      name: "Aryan Shah",
+      role: "Founder & CEO",
+      initial: "A",
+      color: "bg-[#c8f400]",
+    },
+    {
+      name: "Priya Mehta",
+      role: "Head of Product",
+      initial: "P",
+      color: "bg-blue-500",
+    },
+    {
+      name: "Rohan Verma",
+      role: "Lead Engineer",
+      initial: "R",
+      color: "bg-purple-500",
+    },
+    {
+      name: "Sneha Kapoor",
+      role: "Design Director",
+      initial: "S",
+      color: "bg-rose-500",
+    },
   ];
 
   const card =
@@ -64,10 +84,12 @@ const About = () => {
           />
 
           <div className="relative">
-            <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-[#c8f400] text-black shadow-[0_0_30px_rgba(200,244,0,0.15)]">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M13.5 2 5 13.5h6L10 22l9-12h-6.2L13.5 2Z" />
-              </svg>
+            <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center overflow-hidden rounded-2xl  ">
+              <img
+                src="/favicon.png"
+                alt="SkyMart Logo"
+                className="h-full w-full object-contain"
+              />
             </div>
 
             <h1 className="font-syne text-3xl font-extrabold tracking-tight sm:text-4xl">
@@ -109,14 +131,14 @@ const About = () => {
           <div className="space-y-3 text-sm leading-6 text-gray-400 sm:leading-7">
             <p>
               SkyMart started in 2022 as a small side project. We wanted to
-              build something better than the bloated, confusing online
-              shopping experiences people had grown used to.
+              build something better than the bloated, confusing online shopping
+              experiences people had grown used to.
             </p>
 
             <p>
-              Our goal was simple: make it easier to discover quality
-              products, compare prices, and shop without unnecessary hassle.
-              Every part of the experience should feel straightforward.
+              Our goal was simple: make it easier to discover quality products,
+              compare prices, and shop without unnecessary hassle. Every part of
+              the experience should feel straightforward.
             </p>
 
             <p>
@@ -135,7 +157,10 @@ const About = () => {
 
           <div className="grid grid-cols-1 gap-3 sm:gap-4 md:grid-cols-2">
             {values.map((item) => (
-              <article key={item.title} className={`${card} group flex gap-3.5 p-4 sm:p-5`}>
+              <article
+                key={item.title}
+                className={`${card} group flex gap-3.5 p-4 sm:p-5`}
+              >
                 <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#c8f400]/10 text-lg text-[#c8f400] transition duration-300 group-hover:bg-[#c8f400] group-hover:text-black">
                   {item.icon}
                 </div>

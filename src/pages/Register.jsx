@@ -56,12 +56,14 @@ const strengthStyles = {
 const RegisterPage = () => {
   // Live value of the password input (used for the strength line and for confirm check)
 
-    const { navigate,
-      register,
-      handleSubmit,
-      watch,
-      errors,
-      registerFormSubmit} = useAuth();
+  const {
+    navigate,
+    register,
+    handleSubmit,
+    watch,
+    errors,
+    registerFormSubmit,
+  } = useAuth();
   const password = watch("password") || "";
 
   // Show / hide password (one for each password field)
@@ -126,10 +128,12 @@ const RegisterPage = () => {
 
       {/* Logo */}
       <div className="relative mb-5 flex items-center gap-2.5 font-['Syne'] text-xl font-bold">
-        <div className="grid h-10 w-10 place-items-center rounded-xl bg-gradient-to-br from-[#d9ff2e] to-[#a6d400] text-[#0b0b0b] shadow-[0_6px_22px_rgba(200,244,0,0.4)]">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M13.5 2 5 13.5h6L10 22l9-12h-6.2L13.5 2Z" />
-          </svg>
+        <div className="grid h-10 w-10 place-items-center rounded-xl  from-[#d9ff2e] to-[#a6d400] text-[#0b0b0b] ">
+          <img
+            src="/favicon.png"
+            alt="SkyMart Logo"
+            className="h-full w-full object-contain"
+          />
         </div>
         <div>
           Sky<span className="text-[#c8f400]">Mart</span>

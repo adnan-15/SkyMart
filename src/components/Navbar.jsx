@@ -131,11 +131,11 @@ const Navbar = () => {
           aria-label="SkyMart home"
           className="group flex items-center gap-2.5 justify-self-start font-['Syne'] text-xl font-bold"
         >
-          <span className="grid h-9 w-9 place-items-center rounded-xl bg-gradient-to-br from-[#d9ff2e] to-[#a6d400] text-[#0b0b0b] shadow-[0_4px_16px_rgba(200,244,0,0.3)] transition duration-300 [@media(hover:hover)]:group-hover:-rotate-6 [@media(hover:hover)]:group-hover:scale-105">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M13.5 2 5 13.5h6L10 22l9-12h-6.2L13.5 2Z" />
-            </svg>
-          </span>
+          <img
+            src="/favicon.png"
+            alt="SkyMart"
+            className="h-10 w-10 object-contain transition duration-300 [@media(hover:hover)]:group-hover:scale-105"
+          />
           <span className="max-[359px]:hidden">
             Sky<span className="text-[#c8f400]">Mart</span>
           </span>
