@@ -6,7 +6,14 @@ import { toast } from "react-hot-toast";
 import { FaCheck } from "react-icons/fa";
 import { FaXmark } from "react-icons/fa6";
 export const useAuth = () => {
-  const { registerU, setRegister, login, setLogin } = useContext(Auth);
+  const {
+    registerU,
+    setRegister,
+    login,
+    setLogin,
+    setstoreProduct,
+    setcartOpen,
+  } = useContext(Auth);
 
   let navigate = useNavigate();
 
@@ -109,27 +116,44 @@ export const useAuth = () => {
 
     setLogin(user);
     localStorage.setItem("login", JSON.stringify(user));
-    toast.success("User logged in successfully", {
-      duration: 2500,
-      position: "bottom-right",
-      icon: (
-        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#c8f400]">
-          <FaCheck className="text-sm text-[#0c0c0c]" />
-        </div>
-      ),
-      style: {
-        background: "#141414",
-        color: "#fff",
-        border: "1px solid #c8f400",
-        borderRadius: "10px",
-        padding: "10px 15px",
-        fontSize: "14px",
-        fontWeight: "600",
-        boxShadow: "0 8px 30px rgba(200, 244, 0, 0.15)",
-      },
-    });
     navigate("/home");
     reset();
+  };
+
+  const addToCart = (product) => {
+    setstoreProduct((prev) => {
+      let pro = prev.find((val) => val.id === product.id);
+
+      if (pro) {
+        return prev.map((val) =>
+          val.id === product.id
+            ? { ...val, quantity: (val.quantity || 1) + 1 }
+            : val,
+        );
+      }
+      return [...prev, { ...product, quantity: 1 }];
+    });
+    setcartOpen(true);
+  };
+
+  const increaseProduct = (id) => {
+    setstoreProduct((prev) =>
+      prev
+        .map((val) =>
+          val.id === id ? { ...val, quantity: (val.quantity ?? 1) + 1 } : val,
+        )
+        .filter((val) => val.quantity > 0),
+    );
+  };
+
+  const decreaseProduct = (id) => {
+    setstoreProduct((prev) =>
+      prev
+        .map((val) =>
+          val.id === id ? { ...val, quantity: (val.quantity ?? 1) - 1 } : val,
+        )
+        .filter((val) => val.quantity > 0),
+    );
   };
   return {
     navigate,
@@ -140,5 +164,8 @@ export const useAuth = () => {
     watch,
     loginFormSubmit,
     registerFormSubmit,
+    addToCart,
+    increaseProduct,
+    decreaseProduct
   };
 };

@@ -9,6 +9,8 @@ import About from "../pages/About";
 import PublicRoute from "./PublicRoute";
 import MainLayout from "../layout/MainLayout";
 import ProtectedRoute from "./ProtectedRoute";
+import CardOverview from "../components/CardOverview";
+import Cart from "../components/Cart";
 
 const AppRoutes = () => {
   let router = createBrowserRouter([
@@ -44,14 +46,22 @@ const AppRoutes = () => {
               path: "",
               element: <Home />,
             },
-            ,
+
             {
               path: "products",
               element: <Products />,
             },
             {
+              path: ":id",
+              element: <CardOverview />,
+            },
+            {
               path: "about",
               element: <About />,
+            },
+            {
+              path: "cart",
+              element: <Cart />,
             },
           ],
         },

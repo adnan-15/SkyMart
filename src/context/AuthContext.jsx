@@ -1,7 +1,6 @@
 import { createContext, useEffect, useState } from "react";
 import { axiosInstance } from "../config/axiosInstance";
 import { toast } from "react-hot-toast";
-import { FaCheck } from "react-icons/fa";
 import { FaXmark } from "react-icons/fa6";
 export const Auth = createContext();
 
@@ -11,13 +10,13 @@ export const AuthProvider = ({ children }) => {
   );
 
   const [login, setLogin] = useState(JSON.parse(localStorage.getItem("login")));
-
-  const [product, setproduct] = useState();
+  
+  const [productData, setproductData] = useState([]);
 
   let getProduct = async () => {
     try {
       let res = await axiosInstance.get("/products");
-      setproduct(res.data);
+      setproductData(res.data);
     } catch (e) {
       toast.error(e, {
   duration: 2500,
@@ -47,13 +46,13 @@ export const AuthProvider = ({ children }) => {
   console.log("Login : ", login);
   console.log("Register : ", registerU);
 
-  const [productData, setproductData] = useState([]);
   const [loading, setloading] = useState(true);
   const [category, setcategory] = useState("All Categories");
   const [searchItem, setsearchItem] = useState("");
   const [sortBy, setsortBy] = useState("all");
   const [storeProduct, setstoreProduct] = useState([]);
   const [loadedEmail, setloadedEmail] = useState(null);
+  const [cartOpen, setcartOpen] = useState(false);
   useEffect(() => {
     if (login) {
       try {
@@ -77,7 +76,6 @@ export const AuthProvider = ({ children }) => {
     }
   }, [storeProduct, login, loadedEmail]);
 
-  const [cartOpen, setcartOpen] = useState(false);
   return (
     <Auth.Provider
       value={{
@@ -87,10 +85,8 @@ export const AuthProvider = ({ children }) => {
         setcartOpen,
         login,
         setLogin,
-        product,
         storeProduct,
         setstoreProduct,
-        setproduct,
         productData,
         setproductData,
         loading,
@@ -101,6 +97,7 @@ export const AuthProvider = ({ children }) => {
         setsearchItem,
         sortBy,
         setsortBy,
+        getProduct
       }}
     >
       {children}

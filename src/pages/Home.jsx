@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { Auth } from "../context/AuthContext";
 import {
   ArrowRight,
@@ -9,15 +9,24 @@ import {
   Tag,
   Zap,
   ShoppingBag,
-  X,
-  Plus,
-  Minus,
-  Trash2,
 } from "lucide-react";
+import { useAuth } from "../hooks/useAuth";
+import CardOverview from "../components/CardOverview";
+import toast from "react-hot-toast";
+import { FaCheck } from "react-icons/fa6";
+import { useEffect } from "react";
 
 const Home = () => {
   const navigate = useNavigate();
-  const { product = [], setcategory, cartOpen ,setcartOpen,storeProduct} = useContext(Auth);
+  let { id } = useParams();
+  const {
+    productData = [],
+    setcategory,
+    setcartOpen,
+    storeProduct,
+    getProduct
+  } = useContext(Auth);
+  let { addToCart } = useAuth();
 
   const getGreeting = () => {
     const hour = new Date().getHours();
@@ -35,24 +44,28 @@ const Home = () => {
     }
   };
 
+  useEffect(()=>{
+    getProduct();
+  },[])
+  
   const categories = Object.values(
-    product.reduce((acc, p) => {
+    productData.reduce((acc, p) => {
       acc[p.category] ??= { name: p.category, image: p.image, count: 0 };
       acc[p.category].count++;
       return acc;
     }, {}),
   );
 
-  const topRated = [...product]
+  const topRated = [...productData]
     .sort((a, b) => (b.rating?.rate ?? 0) - (a.rating?.rate ?? 0))
     .slice(0, 5);
 
-  const newArrivals = [...product].slice(-5).reverse();
+  const newArrivals = [...productData].slice(-5).reverse();
 
   const stats = [
     {
       icon: Package,
-      value: "0",
+      value: storeProduct.length,
       title: "Cart Items",
       desc: "In your bag",
       color: "text-[#c8f400]",
@@ -60,7 +73,13 @@ const Home = () => {
     },
     {
       icon: TrendingUp,
-      value: "$0.00",
+      value: storeProduct
+        .reduce(
+          (total, initial) =>
+            total + Number(initial.price) * (initial.quantity || 1),
+          0,
+        )
+        .toFixed(2),
       title: "Cart Value",
       desc: "Ready to checkout",
       color: "text-blue-400",
@@ -98,6 +117,8 @@ const Home = () => {
       items: newArrivals,
     },
   ];
+
+  if (id) return <CardOverview />;
 
   return (
     <main className="font-dm-sans min-h-screen bg-[#0c0c0c] py-8 text-white sm:py-12">
@@ -158,7 +179,7 @@ const Home = () => {
             <div className="flex shrink-0 flex-row gap-3 md:w-[190px] md:flex-col">
               <div className="flex-1 rounded-2xl border border-[#c8f400]/25 bg-[#c8f400]/10 px-5 py-5 text-center">
                 <p className="font-syne text-3xl font-extrabold text-[#c8f400]">
-                  {product.length}+
+                  {productData.length}+
                 </p>
                 <p className="mt-1 text-xs text-gray-400">Products Available</p>
               </div>
@@ -270,6 +291,9 @@ const Home = () => {
                 {items.map((item) => (
                   <div
                     key={`${title}-${item.id}`}
+                    onClick={() => {
+                      navigate(`/main/${item.id}`);
+                    }}
                     className="flex items-center gap-4 rounded-2xl border border-white/10 bg-white/[0.02] p-3 pr-4 transition duration-300 hover:border-[#c8f400]/40 hover:bg-[#c8f400]/[0.04]"
                   >
                     <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-white p-1.5">
@@ -292,6 +316,30 @@ const Home = () => {
                     <button
                       type="button"
                       aria-label="Add to cart"
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        addToCart(item);
+                        setcartOpen(true);
+                        toast.success("Added to Cart 🛒", {
+                      duration: 2500,
+                      position: "bottom-right",
+                      icon: (
+                        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#c8f400]">
+                          <FaCheck className="text-sm text-[#0c0c0c]" />
+                        </div>
+                      ),
+                      style: {
+                        background: "#141414",
+                        color: "#fff",
+                        border: "1px solid #c8f400",
+                        borderRadius: "10px",
+                        padding: "10px 15px",
+                        fontSize: "14px",
+                        fontWeight: "600",
+                        boxShadow: "0 8px 30px rgba(200, 244, 0, 0.15)",
+                      },
+                    });
+                      }}
                       className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#c8f400]/15 text-[#c8f400] transition hover:bg-[#c8f400] hover:text-black"
                     >
                       <ShoppingBag size={16} />
@@ -303,85 +351,6 @@ const Home = () => {
           ))}
         </div>
       </div>
-      {cartOpen && (
-        <div className="fixed inset-0 z-[100] flex justify-end">
-          {/* Backdrop */}
-          <div className="absolute inset-0 bg-black/70 backdrop-blur-[5px]" />
-
-          {/* Cart Drawer */}
-          <aside className="relative flex h-full w-full max-w-[490px] flex-col border-l border-white/10 bg-[#111111] text-white shadow-2xl">
-            {/* Header */}
-            <div className="flex items-center justify-between border-b border-white/70 px-7 py-7">
-              <div className="flex items-center gap-3">
-                <ShoppingBag size={23} className="text-[#c8f400]" />
-                <h2 className="text-xl font-bold">Cart</h2>
-                <span className="rounded-full bg-[#c8f400]/15 px-3 py-1 text-xs font-semibold text-[#c8f400]">
-                  1 items
-                </span>
-              </div>
-
-              <button className="text-gray-400 transition hover:text-white" onClick={()=>setcartOpen(false)}>
-                <X size={22} />
-              </button>
-            </div>
-
-            {/* Cart Products */}
-            <div className="flex-1 overflow-y-auto p-7">
-              <div className="flex gap-4 rounded-[20px] border border-white/70 p-3.5">
-                <div className="flex h-[84px] w-[84px] shrink-0 items-center justify-center rounded-2xl bg-white p-2">
-                  <img
-                    src="https://fakestoreapi.com/img/81t2KVWHzgL._AC_SX679_.jpg"
-                    alt="Product"
-                    className="h-full w-full object-contain"
-                  />
-                </div>
-
-                <div className="min-w-0 flex-1">
-                  <h3 className="text-sm font-medium text-gray-200">
-                    Bookshelf
-                  </h3>
-
-                  <p className="mt-2 font-bold text-[#c8f400]">$129.99</p>
-
-                  <p className="text-xs text-gray-500">$129.99 each</p>
-
-                  <div className="mt-3 flex items-center gap-3">
-                    <button className="rounded-lg border border-white/10 p-2 hover:bg-gray-900">
-                      <Minus size={13} />
-                    </button>
-
-                    <span className="text-sm">1</span>
-
-                    <button className="rounded-lg border border-white/10 p-2 hover:bg-gray-900">
-                      <Plus size={13} />
-                    </button>
-
-                    <button className="ml-auto p-2 text-red-400 hover:text-red-500">
-                      <Trash2 size={16} />
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Footer */}
-            <div className="border-t border-white/70 p-7">
-              <div className="mb-5 flex items-center justify-between">
-                <span className="text-sm text-gray-400">Total</span>
-                <span className="text-2xl font-extrabold">$129.99</span>
-              </div>
-
-              <button className="flex w-full items-center justify-center gap-3 rounded-2xl bg-[#c8f400] py-4 font-bold text-black transition hover:bg-[#dcff35]">
-                Checkout <ArrowRight size={19} />
-              </button>
-
-              <button className="mt-5 w-full text-center text-xs text-gray-500 hover:text-red-500">
-                Clear cart
-              </button>
-            </div>
-          </aside>
-        </div>
-      )}
     </main>
   );
 };

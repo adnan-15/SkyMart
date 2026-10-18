@@ -1,27 +1,18 @@
 import React, { useContext } from "react";
 import { Auth } from "../context/AuthContext";
-import { useEffect } from "react";
+import { useNavigate } from "react-router";
+import { useAuth } from "../hooks/useAuth";
+import toast from "react-hot-toast";
+import { FaCheck } from "react-icons/fa6";
+import { Check } from "lucide-react";
 
 const ProductCard = ({ product, index = 0 }) => {
-  let { image, title, category, price, rating } = product;
+  let { image, title, category, price, rating, id } = product;
 
-  let { setstoreProduct, setcartOpen,storeProduct} = useContext(Auth);
+  let { addToCart } = useAuth();
+  let { setcartOpen, storeProduct } = useContext(Auth);
 
-  const addToCart = () => {
-    setstoreProduct((prev) => {
-      
-      let pro = prev.find((val) => val.id === product.id);
-      
-      if (pro) {
-        
-        return prev.map(
-          (val) => val.id === product.id
-          ? { ...val, quantity: (val.quantity || 1) + 1 }: val);
-        }
-      return [...prev, { ...product, quantity: 1 }];
-    });
-    setcartOpen(true);
-  };
+  let navigate = useNavigate();
 
   return (
     <>
@@ -63,6 +54,9 @@ const ProductCard = ({ product, index = 0 }) => {
 
       <article
         style={{ "--delay": `${Math.min(index, 10) * 65}ms` }}
+        onClick={() => {
+          navigate(`/main/${id}`);
+        }}
         className="product-enter product-card group overflow-hidden rounded-[26px] border border-white/[0.08] bg-[#141414] transition-[transform,border-color,box-shadow] duration-500 ease-[cubic-bezier(.22,1,.36,1)] hover:-translate-y-2 hover:border-[#c8f400]/40 hover:shadow-[0_20px_45px_rgba(0,0,0,.4)]"
       >
         {/* Image */}
@@ -134,31 +128,87 @@ const ProductCard = ({ product, index = 0 }) => {
               </p>
             </div>
 
-            <button
-              type="button"
-              onClick={addToCart}
-              className="group/add relative flex shrink-0 items-center gap-2 overflow-hidden rounded-full bg-[#c8f400] px-4 py-2.5 text-xs font-extrabold text-black transition-[transform,background-color,box-shadow] duration-300 ease-out hover:scale-105 hover:bg-[#dcff35] hover:shadow-[0_5px_22px_rgba(200,244,0,.25)] active:scale-95"
-            >
-              <span className="pointer-events-none absolute inset-0 -translate-x-[150%] skew-x-[-20deg] bg-white/40 transition-transform duration-700 group-hover/add:translate-x-[180%]" />
-
-              <svg
-                className="relative transition-transform duration-300 group-hover/add:-rotate-6"
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
+            {storeProduct.some((val) => val.id === id) ? (
+              <button
+                aria-label="Wishlist"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  addToCart(product);
+                  setcartOpen(true);
+                  toast.success("Quantity Updated!", {
+                    duration: 2500,
+                    position: "bottom-right",
+                    icon: (
+                      <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#c8f400]">
+                        <FaCheck className="text-sm text-[#0c0c0c]" />
+                      </div>
+                    ),
+                    style: {
+                      background: "#141414",
+                      color: "#fff",
+                      border: "1px solid #c8f400",
+                      borderRadius: "10px",
+                      padding: "10px 15px",
+                      fontSize: "14px",
+                      fontWeight: "600",
+                      boxShadow: "0 8px 30px rgba(200, 244, 0, 0.15)",
+                    },
+                  });
+                }}
+                className="group/added relative flex shrink-0 items-center gap-2 overflow-hidden rounded-xl border border-green-400/30 bg-green-400/10 px-3 py-2.5 text-xs font-extrabold text-green-400 transition-[transform,background-color,box-shadow] duration-300 hover:scale-105 hover:bg-green-400/20 hover:shadow-[0_5px_22px_rgba(74,222,128,.15)] active:scale-95"
               >
-                <circle cx="9" cy="21" r="1" />
-                <circle cx="20" cy="21" r="1" />
-                <path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6" />
-              </svg>
+                <Check size={16} /> Added
+              </button>
+            ) : (
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  addToCart(product);
+                  setcartOpen(true);
+                  toast.success("Added to Cart 🛒", {
+                    duration: 2500,
+                    position: "bottom-right",
+                    icon: (
+                      <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#c8f400]">
+                        <FaCheck className="text-sm text-[#0c0c0c]" />
+                      </div>
+                    ),
+                    style: {
+                      background: "#141414",
+                      color: "#fff",
+                      border: "1px solid #c8f400",
+                      borderRadius: "10px",
+                      padding: "10px 15px",
+                      fontSize: "14px",
+                      fontWeight: "600",
+                      boxShadow: "0 8px 30px rgba(200, 244, 0, 0.15)",
+                    },
+                  });
+                }}
+                className="group/add relative flex shrink-0 items-center gap-2 overflow-hidden rounded-full bg-[#c8f400] px-4 py-2.5 text-xs font-extrabold text-black transition-[transform,background-color,box-shadow] duration-300 ease-out hover:scale-105 hover:bg-[#dcff35] hover:shadow-[0_5px_22px_rgba(200,244,0,.25)] active:scale-95"
+              >
+                <span className="pointer-events-none absolute inset-0 -translate-x-[150%] skew-x-[-20deg] bg-white/40 transition-transform duration-700 group-hover/add:translate-x-[180%]" />
 
-              <span className="relative">Add</span>
-            </button>
+                <svg
+                  className="relative transition-transform duration-300 group-hover/add:-rotate-6"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <circle cx="9" cy="21" r="1" />
+                  <circle cx="20" cy="21" r="1" />
+                  <path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6" />
+                </svg>
+
+                <span className="relative">Add</span>
+              </button>
+            )}
           </div>
         </div>
       </article>

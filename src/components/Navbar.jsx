@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
 import { Auth } from "../context/AuthContext";
-import { FaXmark } from "react-icons/fa6";
+import { FaCheck, FaXmark } from "react-icons/fa6";
 import toast from "react-hot-toast";
 // Fonts (Syne + DM Sans) and animation used by the classes below
 const pageStyles = `
@@ -93,7 +93,7 @@ const Navbar = () => {
     setMenuOpen(false);
     setstoreProduct([]);
     navigate("/");
-    localStorage.setItem("login",null)
+    localStorage.setItem("login", null);
   };
 
   return (
@@ -172,26 +172,26 @@ const Navbar = () => {
           <button
             type="button"
             onClick={() => {
-              toast.error("User Logged out!", {
+              toast.success("Logged out. See you soon! 👋", {
                 duration: 2500,
                 position: "bottom-right",
                 icon: (
-                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#ff4d4f]">
-                    <FaXmark className="text-sm text-white" />
+                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#c8f400]">
+                    <FaCheck className="text-sm text-[#0c0c0c]" />
                   </div>
                 ),
                 style: {
                   background: "#141414",
                   color: "#fff",
-                  border: "1px solid #ff4d4f",
+                  border: "1px solid #c8f400",
                   borderRadius: "10px",
                   padding: "10px 15px",
                   fontSize: "14px",
                   fontWeight: "600",
-                  boxShadow: "0 8px 30px rgba(255, 77, 79, 0.15)",
+                  boxShadow: "0 8px 30px rgba(200, 244, 0, 0.15)",
                 },
               });
-               handleLogout()
+              handleLogout();
             }}
             aria-label="Log out"
             className={logoutButtonClass}

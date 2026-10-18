@@ -1,8 +1,12 @@
 import React from "react";
 import Navbar from "../components/Navbar";
 import { Outlet } from "react-router";
+import Cart from "../components/Cart";
+import { useContext } from "react";
+import { Auth } from "../context/AuthContext";
 
 const MainLayout = () => {
+  let {cartOpen} = useContext(Auth)
   return (
     <div className="flex min-h-screen flex-col bg-[#0c0c0c] text-white">
       {/* Fixed Navbar */}
@@ -12,7 +16,8 @@ const MainLayout = () => {
 
       {/* Main Content (pt-20 = navbar height, so content doesn't hide under it) */}
       <main className="flex-1 pt-20">
-        <Outlet />
+         <Outlet />
+        {cartOpen && <Cart/>}
       </main>
 
       {/* Footer */}
